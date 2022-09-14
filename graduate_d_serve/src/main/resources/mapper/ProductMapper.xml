@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.product.mapper.ProductMapper">
+    <!--外部映射  -->
+    <resultMap type="com.neu.product.entity.Product" id="productResult">
+        <result column="id" property="id" /> <!--property代表实体类属性  -->
+        <result column="pname" property="pname" />
+        <result column="pimg" property="pimg" />
+        <result column="price" property="price" />
+        <result column="totalnum" property="totalnum" />
+        <result column="averagerate" property="averagerate" />
+        <result column="psize" property="psize" />
+        <result column="ptime" property="ptime" />
+        <result column="pdesc" property="pdesc" />
+        <association property="ptype" javaType="com.neu.product.entity.Type">
+            <result column="tid" property="tid" />
+            <result column="tname" property="tname" />
+            <result column="tdesc" property="tdesc" />
+        </association>
+        <association property="pstate" javaType="com.neu.product.entity.State">
+            <result column="sid" property="sid" />
+            <result column="sname" property="sname" />
+            <result column="sdesc" property="sdesc" />
+        </association>
+        <association property="recentlyRate" javaType="com.neu.product.entity.RecentlyRate">
+            <result column="rid" property="rid" />
+            <result column="jan" property="jan" />
+            <result column="mar" property="mar" />
+            <result column="may" property="may" />
+            <result column="july" property="july" />
+            <result column="sep" property="sep" />
+            <result column="nov" property="nov" />
+        </association>
+        <association property="pmanager" javaType="com.neu.product.entity.Manager">
+            <result column="mid" property="mid" />
+            <result column="mname" property="mname" />
+            <result column="mdesc" property="mdesc" />
+
+        </association>
+    </resultMap>
+    <!--   查询所有用户-->
+    <select id="findProduct" resultMap="productResult">
+  			<![CDATA[
+            select b.* from
+            (select p.*,t.*,s.*,m.*,e.*,rownum r from g_d_product p ,g_d_p_type t ,g_d_p_state s,g_d_p_manager m,g_d_p_recentlyrate e
+            where p.ptype=t.tid and p.pstate=s.sid and p.pmanager=m.mid and p.recentlyRate=e.rid) b
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+
+        ]]>
+    </select>
+    <!-- 查询总记录数 -->
+    <select id="countProduct" resultType="int">
+        select count(1) from g_d_product
+    </select>
+
+    <!--根据id删除记录-->
+    <delete id="deleteProduct" parameterType="com.neu.product.entity.Product">
+        delete from g_d_product where id=#{id}
+
+    </delete>
+    <!-- 根据id修改记录-->
+    <update id="updateProduct" parameterType="com.neu.product.entity.Product">
+        update g_d_product set pname=#{pname},pimg=#{pimg},ptype=#{ptype.tid},price=#{price},
+        totalnum=#{totalnum},averagerate=#{averagerate},
+        psize=#{psize},pmanager=#{pmanager.mid},pdesc=#{pdesc}
+        where id=#{id}
+    </update>
+    <!-- 根据id查询数据-->
+    <select id="findById" resultType="java.util.HashMap">
+        select * from g_d_product where id=#{id}
+    </select>
+    <!-- 添加产品-->
+    <insert id="addProduct" parameterType="com.neu.product.entity.Product">
+        insert  into g_d_product(id,pname,pimg,ptype,price,pstate,totalnum,averagerate,recentlyrate,psize,ptime,pmanager,pdesc)
+        values(seq_g_d_product.nextval,#{pname},'1.jpg',#{ptype.tid},#{price},1,
+               #{totalnum},#{averagerate},seq_g_d_p_ra.nextval-1,#{psize},sysdate,#{pmanager.mid},#{pdesc})
+    </insert>
+    <!--  模糊查询-->
+    <sql id="sql1">
+        select d.* from
+            ( select p.*,t.*,s.*,m.*,e.*,rownum r from g_d_product p ,g_d_p_type t ,g_d_p_state s,g_d_p_manager m,g_d_p_recentlyrate e
+              where p.ptype=t.tid and p.pstate=s.sid and p.pmanager=m.mid and p.recentlyRate=e.rid
+    </sql>
+    <sql id="sql2">
+        <![CDATA[
+        )d
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+    </sql>
+    <select id="findProductMo"  resultMap="productResult">
+        <include refid="sql1"></include>
+        <if test="pname!=null and pname!=''">
+            and pname like '%${pname}%'
+        </if>
+        <include refid="sql2"></include>
+    </select>
+
+    <!-- 模糊查询总记录数-->
+    <select id="countMo" resultType="int">
+        select count(*) from g_d_product
+        <where>
+            <if test="pname!=null and  pname!=''">
+                pname like '%${pname}%'
+            </if>
+        </where>
+    </select>
+    <!-- 根据id修改状态-->
+    <update id="updateState" parameterType="com.neu.product.entity.Product">
+        update g_d_product set pstate=#{pstate.sid} where id=#{id}
+    </update>
+    <!--  添加产品时同时添加产品的近期收益率id-->
+    <insert id="addRecentlyRate">
+        insert  into g_d_p_recentlyrate(rid,jan,mar,may,july,sep,nov)
+        values(seq_g_d_p_ra.nextval,null,null,null,null,null,null)
+    </insert>
+</mapper>

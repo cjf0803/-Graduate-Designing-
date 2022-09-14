@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.user.mapper.UserRoleMapper">
+    <!--   查询所有用户-->
+    <select id="findRole" resultType="com.neu.user.entity.Role" parameterType="map">
+  			<![CDATA[
+        select b.*
+        from (select e.*, rownum r from g_d_u_role e) b
+        where r > (#{index} - 1) * #{size}
+          and r <= #{index} * #{size}
+        ]]>
+    </select>
+    <!-- 查询总记录数 -->
+    <select id="countRole" resultType="int">
+        select count(1)
+        from g_d_u_role
+    </select>
+
+    <!--根据id删除记录-->
+    <delete id="deleteRole" parameterType="com.neu.user.entity.Role">
+        delete
+        from g_d_u_role
+        where rid = #{rid}
+
+    </delete>
+    <!-- 根据id修改记录-->
+    <update id="updateRole" parameterType="com.neu.user.entity.Role">
+        update g_d_u_role
+        set rname=#{rname},
+            rdesc=#{rdesc},
+            rdate=sysdate,
+            rauthor=#{rauthor}
+        where rid = #{rid}
+    </update>
+    <!-- 根据id查询数据-->
+    <select id="findById" resultType="com.neu.user.entity.Role">
+        select *
+        from g_d_u_role
+        where rid = #{rid}
+    </select>
+    <!-- 添加角色-->
+    <insert id="addRole" parameterType="com.neu.user.entity.Role">
+        insert  into g_d_u_role(rid,rname,rdesc,rdate,rauthor)
+        values(seq_g_d_u_role.nextval,#{rname},#{rdesc},sysdate,#{rauthor})
+    </insert>
+</mapper>

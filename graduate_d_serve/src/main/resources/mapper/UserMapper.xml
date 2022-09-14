@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.user.mapper.UserMapper">
+    <!--外部映射  -->
+    <resultMap type="com.neu.user.entity.User" id="userResult">
+        <result column="id" property="id" /> <!--property代表实体类属性  -->
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="img" property="img" />
+        <result column="nickname" property="nickname" />
+        <result column="sex" property="sex" />
+        <result column="createtime" property="createtime" />
+        <result column="mobile" property="mobile" />
+        <result column="email" property="email" />
+        <association property="role_id" javaType="com.neu.user.entity.Role">
+            <result column="rid" property="rid" />
+            <result column="rname" property="rname" />
+            <result column="rdesc" property="rdesc" />
+            <result column="rdate" property="rdate" />
+            <result column="rauthor" property="rauthor" />
+        </association>
+        <association property="state" javaType="com.neu.user.entity.State">
+            <result column="sid" property="sid" />
+            <result column="sname" property="sname" />
+            <result column="sdesc" property="sdesc" />
+        </association>
+        <association property="moneyid" javaType="com.neu.user.entity.Money">
+            <result column="mid" property="mid" />
+            <result column="totalmoney" property="totalmoney" />
+            <result column="income" property="income" />
+            <result column="pay" property="pay" />
+            <result column="balance" property="balance" />
+        </association>
+    </resultMap>
+
+    <!--这是登陆功能  -->
+    <select id ="login"  resultType="java.util.HashMap">
+        select * from g_d_user where username=#{username} and password=#{password}
+    </select>
+
+    <!-- 用户注册-->
+    <insert id="regist" parameterType="com.neu.user.entity.User">
+        insert  into g_d_user(id,username,password,img,nickname,sex,createtime,role_id,state,mobile,email,moneyid)
+        values(seq_g_d_user.nextval,#{username},#{password},'0.jpg',null,'男',sysdate,'0','1',null,#{email},seq_g_d_money.nextval-1)
+    </insert>
+    <!--   查询所有用户-->
+    <select id="findUser" resultMap="userResult">
+  			<![CDATA[
+            select b.* from
+            (select u.*  ,e.rname ,e.rid,  s.sname,s.sid, m.balance ,m.mid,m.totalmoney,m.pay,m.income,rownum r from g_d_user u ,g_d_u_role e ,g_d_u_state s,g_d_u_money m where u.role_id=e.rid and u.state=s.sid and u.moneyid=m.mid) b
+
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+
+        ]]>
+    </select>
+    <!-- 查询总记录数 -->
+    <select id="countUser" resultType="int">
+        select count(1) from g_d_user
+    </select>
+
+    <!--根据id删除记录-->
+    <delete id="deleteUser" parameterType="com.neu.user.entity.User">
+        delete from g_d_user where id=#{id}
+
+    </delete>
+    <!-- 根据id修改记录-->
+    <update id="updateUser" parameterType="com.neu.user.entity.User">
+        update g_d_user set username=#{username},password=#{password},img=#{img},nickname=#{nickname},sex=#{sex},role_id=#{role_id.rid},mobile=#{mobile},email=#{email}
+        where id=#{id}
+    </update>
+    <!-- 根据id查询数据-->
+    <select id="findById" resultType="java.util.HashMap">
+        select * from g_d_user where id=#{id}
+    </select>
+
+    <!-- 根据username修改记录-->
+    <update id="updateUserByUsername" parameterType="com.neu.user.entity.User">
+        update g_d_user set password=#{password},img=#{img},nickname=#{nickname},sex=#{sex},mobile=#{mobile},email=#{email}
+        where username=#{username}
+    </update>
+
+    <!--根据username查询数据  -->
+    <select id="findByUsername" resultType="com.neu.user.entity.User">
+        select * from g_d_user where username=#{username}
+    </select>
+<!-- 根据id修改状态-->
+    <update id="updateState" parameterType="com.neu.user.entity.User">
+        update g_d_user set state=#{state.sid} where id=#{id}
+    </update>
+<!-- 添加用户-->
+    <insert id="addUser" parameterType="com.neu.user.entity.User">
+        insert  into g_d_user(id,username,password,img,createtime,role_id,state,moneyid)
+        values(seq_g_d_user.nextval,#{username},'123','1.jpg',sysdate,#{role_id.rid},#{state.sid},seq_g_d_money.nextval-1)
+    </insert>
+    <!--  模糊查询-->
+    <sql id="sql1">
+        select d.* from
+            ( select  u.* ,e.rname ,e.rid, s.sname,s.sid, m.balance ,rownum r from g_d_user u ,g_d_u_role e ,g_d_u_state s,g_d_u_money m where u.role_id=e.rid and u.state=s.sid and u.moneyid=m.mid
+    </sql>
+    <sql id="sql2">
+        <![CDATA[
+        )d
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+    </sql>
+    <select id="findUserMo"  resultMap="userResult">
+        <include refid="sql1"></include>
+        <if test="username!=null and username!=''">
+            and username like '%${username}%'
+        </if>
+        <include refid="sql2"></include>
+    </select>
+
+    <!-- 模糊查询总记录数-->
+    <select id="countMo" resultType="int">
+        select count(*) from g_d_user
+        <where>
+            <if test="username!=null and  username!=''">
+                username like '%${username}%'
+            </if>
+        </where>
+    </select>
+<!--  添加用户时同时添加资金账号-->
+    <insert id="addMoney">
+        insert  into g_d_u_money(mid,totalmoney,income,pay,balance)
+        values(seq_g_d_money.nextval,null,null,null,null)
+    </insert>
+
+<!--  当角色管理删除角色时，将删除的角色用户降级为普通用户-->
+    <update id="updateRoleById" parameterType="map">
+        update g_d_user set role_id='0' where role_id=#{rid}
+    </update>
+</mapper>

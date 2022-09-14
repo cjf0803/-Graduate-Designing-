@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.user.mapper.UserMapper">
+    <!--外部映射  -->
+    <resultMap type="com.neu.user.entity.User" id="userResult">
+        <result column="id" property="id" /> <!--property代表实体类属性  -->
+        <result column="username" property="username" />
+        <result column="password" property="password" />
+        <result column="realname" property="realname" />
+        <association property="status" javaType="com.neu.status.entity.Status">
+            <result column="status_id" property="status_id" />
+            <result column="status_name" property="status_name" />
+        </association>
+        <association property="depart" javaType="com.neu.depart.entity.Depart">
+            <result column="departid" property="departid" />
+            <result column="depart_name" property="depart_name" />
+        </association>
+    </resultMap>
+    <!--这是登陆功能  -->
+    <select id ="login"  resultType="java.util.HashMap">
+        select * from t_s_base_user where username=#{username} and password=#{password}
+    </select>
+
+    <!-- 用户注册-->
+    <insert id="regist" parameterType="com.neu.user.entity.User">
+        insert  into t_s_base_user(id,username,password,realname,status,departid)
+        values(user_SEQUENCE.nextval,#{username},#{password},null,#{status.status_id},null)
+    </insert>
+
+    <select id="findUser" resultMap="userResult">
+  			<![CDATA[
+             select b.* from
+            (select u.* ,d.depart_name, s.status_name , s.status_id ,rownum r from t_s_base_user u ,t_b_depart d ,t_b_role s where u.departid=d.departid and u.status=s.status_id ) b
+
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+
+        ]]>
+  		</select>
+
+    <!-- 查询总记录数 -->
+    <select id="countUser" resultType="int">
+        select count(1) from t_s_base_user
+    </select>
+
+    <!--根据id删除记录-->
+    <delete id="deleteUser" parameterType="com.neu.user.entity.User">
+        delete from t_s_base_user where id=#{id}
+
+    </delete>
+    <!-- 根据id修改记录-->
+    <update id="updateUser" parameterType="com.neu.user.entity.User">
+        update t_s_base_user set username=#{username},password=#{password},realname=#{realname},status=#{status.status_id},departid=#{depart.departid}
+        where id=#{id}
+    </update>
+
+    <!-- 根据username修改记录-->
+    <update id="updateUserByUsername" parameterType="com.neu.user.entity.User">
+        update t_s_base_user set password=#{password},realname=#{realname}
+        where username=#{username}
+    </update>
+
+    <!-- 根据id查询数据-->
+    <select id="findById" resultType="java.util.HashMap">
+        select * from t_s_base_user where id=#{id}
+    </select>
+
+    <!--根据username查询数据  -->
+    <select id="findByUsername" resultType="com.neu.user.entity.User">
+        select * from t_s_base_user where username=#{username}
+    </select>
+
+    <insert id="addUser" parameterType="com.neu.user.entity.User">
+        insert  into t_s_base_user(id,username,password,realname,status,departid)
+        values(user_SEQUENCE.nextval,#{username},#{password},#{realname},#{status.status_id},#{depart.departid})
+    </insert>
+    <!--  模糊查询-->
+    <sql id="sql1">
+        select d.* from
+
+            ( select  u.* ,d.depart_name, s.status_name , s.status_id ,rownum r from t_s_base_user u ,t_b_depart d ,t_b_role s where u.departid=d.departid and u.status=s.status_id
+    </sql>
+    <sql id="sql2">
+        <![CDATA[
+        )d
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+    </sql>
+    <select id="findUserMo"  resultMap="userResult">
+        <include refid="sql1"></include>
+            <if test="username!=null and username!=''">
+                and username like '%${username}%'
+            </if>
+        <include refid="sql2"></include>
+    </select>
+
+    <!-- 模糊查询总记录数-->
+    <select id="countMo" resultType="int">
+        select count(*) from t_s_base_user
+        <where>
+            <if test="username!=null and  username!=''">
+                username like '%${username}%'
+            </if>
+        </where>
+    </select>
+</mapper>

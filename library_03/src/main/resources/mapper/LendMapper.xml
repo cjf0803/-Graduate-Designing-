@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.lend.mapper.LendMapper">
+    <!--外部映射  -->
+    <resultMap type="com.neu.lend.entity.Lend" id="lendResult">
+        <result column="id" property="id" /> <!--property代表实体类属性  -->
+        <result column="bookid" property="bookid" />
+        <result column="bookname" property="bookname" />
+        <result column="author" property="author" />
+        <result column="userid" property="userid" />
+        <result column="realname" property="realname" />
+        <result column="lenddate" property="lenddate" />
+        <result column="returnDate" property="returnDate" />
+        <result column="debit" property="debit" />
+        <result column="username" property="username" />
+        <association property="bookStatus" javaType="com.neu.book.bookstatus.entity.BookStatus">
+            <result column="status_id" property="status_id" />
+            <result column="status_name" property="status_name" />
+        </association>
+    </resultMap>
+    <select id="findLendByUsername" resultMap="lendResult" parameterType="map">
+            <![CDATA[
+        select  d.* from
+            (select g.*,s.status_name ,s.status_id,rownum r
+             from t_b_lend g ,t_b_book_status s where g.status=s.status_id and g.username=#{username}) d
+        where (r>(#{index}-1)*#{size} and r<=#{index}*#{size} )
+        ]]>
+
+    </select>
+    <!--  查询总记录数-->
+    <select id="count" resultType="int">
+        select count(1) from t_b_lend
+    </select>
+
+
+    <!--删除清单  -->
+    <delete id="deleteLend" parameterType="com.neu.lend.entity.Lend">
+        delete from t_b_lend where id=#{id}
+
+    </delete>
+    <!--查询所有用户借还状态  -->
+    <select id="findLend" resultMap="lendResult" parameterType="map">
+            <![CDATA[
+        select  d.* from
+            (select g.*,s.status_name ,s.status_id,rownum r
+             from t_b_lend g ,t_b_book_status s where g.status=s.status_id
+            ) d
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+      </select>
+
+    <!-- 根据id修改记录-->
+    <update id="updateLend" parameterType="com.neu.lend.entity.Lend">
+        update t_b_lend set bookid=#{bookid},bookname=#{bookname},author=#{author},userid=#{userid},realname=#{realname},
+                            lenddate=#{lenddate},returndate=#{returnDate},debit=#{debit},status=#{bookStatus.status_id},username=#{username}
+        where id=#{id}
+    </update>
+    <!-- 根据id查询数据-->
+    <select id="findById" resultType="java.util.HashMap">
+        select * from t_b_lend where id=#{id}
+    </select>
+
+    <!--还书  -->
+    <update id="reback" parameterType="com.neu.lend.entity.Lend">
+        update t_b_lend set returndate=sysdate,status=#{bookStatus.status_id}
+        where bookid=#{bookid} and username=#{username}
+    </update>
+    <!--  模糊查询-->
+    <sql id="sql1">
+        select d.* from
+
+            ( select  l.* , t.status_name , t.status_id ,rownum r from t_b_lend l , t_b_book_status t where  l.status=t.status_id
+    </sql>
+    <sql id="sql2">
+        <![CDATA[
+        )d
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+    </sql>
+    <select id="findLendMo"  resultMap="lendResult">
+        <include refid="sql1"></include>
+        <if test="username!=null and username!=''">
+            and username like '%${username}%'
+        </if>
+        <include refid="sql2"></include>
+    </select>
+
+    <!-- 模糊查询总记录数-->
+    <select id="countMo" resultType="int">
+        select count(*) from t_b_lend
+        <where>
+            <if test="username!=null and  username!=''">
+                username like '%${username}%'
+            </if>
+        </where>
+    </select>
+</mapper>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.book.mapper.BookMapper">
+    <!--外部映射  -->
+    <resultMap type="com.neu.book.entity.Book" id="bookResult">
+        <result column="id" property="id" /> <!--property代表实体类属性  -->
+        <result column="bookname" property="bookname" />
+        <result column="author" property="author" />
+        <result column="pressname" property="pressname" />
+        <result column="path" property="path" />
+        <association property="bookStatus" javaType="com.neu.book.bookstatus.entity.BookStatus">
+            <result column="status_id" property="status_id" />
+            <result column="status_name" property="status_name" />
+        </association>
+    </resultMap>
+    <select id="findBook" resultMap="bookResult" parameterType="map">
+            <![CDATA[
+        select  d.* from
+            (select u.* ,s.status_name  , s.status_id,rownum r from t_b_book u, t_b_book_status s where u.status=s.status_id) d
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+
+    </select>
+    <!--  查询总记录数-->
+    <select id="count" resultType="int">
+        select count(1) from t_b_book
+    </select>
+
+    <!--根据id删除记录-->
+    <delete id="deleteBook" parameterType="com.neu.book.entity.Book">
+        delete from t_b_book where id=#{id}
+
+    </delete>
+    <!-- 根据id修改记录-->
+    <update id="updateBook" parameterType="com.neu.book.entity.Book">
+        update t_b_book set bookname=#{bookname},author=#{author},pressname=#{pressname},status=#{bookStatus.status_id},path=#{path}
+        where id=#{id}
+    </update>
+    <!-- 根据id查询数据-->
+    <select id="findById"  resultType="java.util.HashMap">
+        select * from t_b_book where id=#{id}
+    </select>
+
+    <!-- 添加记录数-->
+    <insert id="addBook" parameterType="com.neu.book.entity.Book">
+        insert into t_b_book(id,bookname,author,pressname,status,path)
+        values(t_b_Book_seq.nextval,#{bookname},#{author},#{pressname},#{bookStatus.status_id},#{path})
+    </insert>
+    <!--增加借书记录  -->
+    <insert id="addLend" parameterType="com.neu.book.entity.Book">
+        insert into t_b_lend(id,bookid,bookname,author,userid,realname,lenddate,returndate,debit,status,username)
+        values(seq__lend.nextval,#{bookid},#{bookname},#{author},#{userid},#{realname},sysdate,null,10,'0',#{username})
+    </insert>
+    <!--  模糊查询-->
+    <sql id="sql1">
+        select d.* from
+
+            ( select  b.* , t.status_name , t.status_id ,rownum r from t_b_book b , t_b_book_status t where  b.status=t.status_id
+    </sql>
+    <sql id="sql2">
+        <![CDATA[
+        )d
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+    </sql>
+    <select id="findBookMo"  resultMap="bookResult">
+        <include refid="sql1"></include>
+        <if test="bookname!=null and bookname!=''">
+            and bookname like '%${bookname}%'
+        </if>
+        <include refid="sql2"></include>
+    </select>
+
+    <!-- 模糊查询总记录数-->
+    <select id="countMo" resultType="int">
+        select count(*) from t_b_book
+        <where>
+            <if test="bookname!=null and  bookname!=''">
+                bookname like '%${bookname}%'
+            </if>
+        </where>
+    </select>
+</mapper>
