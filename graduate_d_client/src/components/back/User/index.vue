@@ -82,6 +82,7 @@
       <el-table-column prop="state.sname" label="状态" width="160">
         <template slot-scope="scope">
           <el-switch
+          :disabled="scope.row.role_id.rid < currentRole ? false: true"
             v-model="scope.row.state.sname"
             active-color="#13ce66"
             inactive-color="orange"
@@ -254,7 +255,7 @@
           <el-form-item class="userimg" prop="img">
             <el-upload
               class="upload-demo"
-              action="http://localhost:8081/user/upload"
+              action="http://localhost:8081/upload/user"
               :file-list="fileList"
               list-type="picture"
               :on-success="handleAvatarSuccess"
@@ -276,7 +277,7 @@
         </div>
       </div>
     </el-drawer>
-    <!-- 详情信息查看 未解决 -->
+    <!-- 详情信息查看 yi解决 -->
     <el-drawer
       title="详情信息"
       :visible.sync="dialogFormDisible"

@@ -8,25 +8,35 @@ import home from '../components/back/home.vue'
 import Index_v from '../components/back/User/index.vue'
 import add_v from '../components/back/User/addUser.vue'
 import role from '../components/back/User/role.vue'
-import addBook from '../components/back/Book/addBook.vue'
-import bookIndex from '../components/back/Book/bookIndex.vue'
-import updateBook from '../components/back/Book/updateBook.vue'
+import productIndex from '../components/back/Product/productIndex.vue'
+import findProductByType from '../components/back/Product/findProductByType.vue'
 import Index1_v from '../components/back/index1.vue'
-//import welcome_v from '../components/back/customer/welcome.vue'
 import findUserMo from '../components/back/User/findUserMo.vue'
-import findBookMo from '../components/back/Book/findBookMo.vue'
-//import findCustomerMo from '../components/back/customer/findCustomerMo.vue'
-import findLendMo from '../components/back/Lend/findLendMo.vue'
-import updateLend from '../components/back/Lend/updateLend.vue'
-import lendIndex from '../components/back/Lend/lendIndex.vue'
+import findProductMo from '../components/back/Product/findProductMo.vue'
+import CartIndex from '../components/back/Cart/CartIndex.vue'
+import findCartMo from '../components/back/Cart/findCartMo.vue'
+import echarts from '../components/back/Data/index.vue'
 import frontIndex from '../components/front/frontIndex.vue'
+import orderIndex from '../components/back/Order/orderIndex.vue'
+import findOrderMo from '../components/back/Order/findOrderMo.vue'
+import findOrderByState from '../components/back/Order/findOrderByState.vue'
 import frontHome from '../components/front/Home.vue'
-import Appearance from '../components/front/Appearance.vue'
-import Elaboration from '../components/front/Elaboration.vue'
-import Flower from '../components/front/Flower.vue'
-import Blogs from '../components/front/Blogs.vue'
-import Info from '../components/front/Info.vue'
-import Research from '../components/front/Research.vue'
+import Shares from '../components/front/Shares.vue'
+import Fund from '../components/front/Fund.vue'
+import Bond from '../components/front/Bond.vue'
+import Bank from '../components/front/Bank.vue'
+import Insurance from '../components/front/Insurance.vue'
+import Gold from '../components/front/Gold.vue'
+import Personal from '../components/front/Personal.vue'
+import Pay from '../components/front/Pay/index.vue'
+import Order from '../components/front/order/index.vue'
+import Cart from '../components/front/Cart.vue'
+import sharesDetail from '../components/front/details/sharesDetail.vue'
+import fundDetail from '../components/front/details/fundDetail.vue'
+import bondDetail from '../components/front/details/bondDetail.vue'
+import bankDetail from '../components/front/details/bankDetail.vue'
+import insuranceDetail from '../components/front/details/insuranceDetail.vue'
+import goldDetail from '../components/front/details/goldDetail.vue'
 Vue.use(VueRouter)
 Vue.use(ElementUI)
 const router = new VueRouter({
@@ -60,35 +70,86 @@ const router = new VueRouter({
         component: frontHome
       },
       {
-        path: '/appearance',
-        name: 'Appearance',
-        component: Appearance
+        path: '/shares',
+        name: 'Shares',
+        component: Shares
       },
       {
-        path: '/elaboration',
-        name: 'Elaboration',
-        component: Elaboration
+        path: '/fund',
+        name: 'Fund',
+        component: Fund
       },
       {
-        path: '/flower',
-        name: 'Flower',
-        component: Flower
+        path: '/bond',
+        name: 'Bond',
+        component: Bond
       },
       {
-        path: '/blogs',
-        name: 'Blogs',
-        component: Blogs
+        path: '/bank',
+        name: 'Bank',
+        component: Bank
       },
       {
-        path: '/info',
-        name: 'Info',
-        component: Info
+        path: '/insurance',
+        name: 'Insurance',
+        component: Insurance
       },
       {
-        path: '/research',
-        name: 'Research',
-        component: Research
+        path: '/gold',
+        name: 'Gold',
+        component: Gold
       },
+      {
+        path: '/personal',
+        name: 'Personal',
+        component: Personal
+      },
+      {
+        path: '/cart',
+        name: 'Cart',
+        component: Cart
+      },
+      {
+        path: '/sharesDetail',
+        name: 'sharesDetail',
+        component: sharesDetail
+      },
+      {
+        path: '/fundDetail',
+        name: 'fundDetail',
+        component: fundDetail
+      },
+      {
+        path: '/bondDetail',
+        name: 'bondDetail',
+        component: bondDetail
+      },
+      {
+        path: '/bankDetail',
+        name: 'bankDetail',
+        component: bankDetail
+      },
+      {
+        path: '/insuranceDetail',
+        name: 'insuranceDetail',
+        component: insuranceDetail
+      },
+      {
+        path: '/goldDetail',
+        name: 'goldDetail',
+        component: goldDetail
+      },
+      {
+        path: '/pay',
+        name: 'Pay',
+        component: Pay
+      },
+      {
+        path: '/order',
+        name: 'Order',
+        component: Order
+      },
+      
     ]
     },
 
@@ -109,15 +170,42 @@ const router = new VueRouter({
           component: Index_v,
          
         },
+       
         {
-          path: '/bookIndex',
-          name: 'bookIndex',
-          component: bookIndex
+          path: '/productIndex',
+          name: 'productIndex',
+          component: productIndex
         },
         {
-          path: '/updateBook',
-          name: 'updateBook',
-          component: updateBook
+          path: '/cartIndex',
+          name: 'cartIndex',
+          component: CartIndex
+        },
+        {
+          path: '/findCartMo',
+          name: 'findCartMo',
+          component: findCartMo
+        },
+        
+        {
+          path: '/findProductByType',
+          name: 'findProductByType',
+          component: findProductByType
+        },
+        {
+          path: '/orderIndex',
+          name: 'orderIndex',
+          component: orderIndex
+        },
+        {
+          path: '/findOrderMo',
+          name: 'findOrderMo',
+          component: findOrderMo
+        },
+        {
+          path: '/findOrderByState',
+          name: 'findOrderByState',
+          component: findOrderByState
         },
         {
           path: '/role',
@@ -131,11 +219,7 @@ const router = new VueRouter({
           component: add_v,
          
         },
-        {
-          path: '/addBook',
-          name: 'addBook',
-          component: addBook
-        },
+      
         {
           path: '/findUserMo',
           name: 'findUserMo',
@@ -143,26 +227,16 @@ const router = new VueRouter({
          
         },
         {
-          path: '/findBookMo',
-          name: 'findBookMo',
-          component: findBookMo
-        },
-
-        {
-          path: '/findLendMo',
-          name: 'findLendMo',
-          component: findLendMo
+          path: '/findProductMo',
+          name: 'findProductMo',
+          component: findProductMo
         },
         {
-          path: '/lendIndex',
-          name: 'lendIndex',
-          component: lendIndex
+          path: '/echarts',
+          name: 'echarts',
+          component: echarts
         },
-        {
-          path: '/updateLend',
-          name: 'updateLend',
-          component: updateLend
-        },
+        
       ]
     },
 
@@ -175,6 +249,8 @@ const router = new VueRouter({
 //   return originalPush.call(this, location).catch(err => err)
 // }
 router.beforeEach((to, from, next) => {
+ 
+  window.scrollTo(0,0);
   /*
     to:从哪个页面
     from:到哪个页面

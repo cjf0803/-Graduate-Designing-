@@ -1,6 +1,8 @@
 package com.neu.product.mapper;
 
+import com.neu.cart.entity.Cart;
 import com.neu.product.entity.Product;
+import com.neu.product.entity.RecentlyRate;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.HashMap;
@@ -22,7 +24,11 @@ public interface ProductMapper {
     public boolean addProduct(Product product);
     public List<Product> findProductMo(Map<String,Object> map);
     public int countMo(Map<String,Object> map);
-    public void addRecentlyRate();
-
+    public void addRecentlyRate(RecentlyRate recentlyRate);
+    public List<Product> findProductByType(Map<String, Object> map);
+    public int countProductByType(String ptype);
+    public List<Product> CustomerfindProductByType(String ptype);
+    public List<Product> CustomerfindProductById(String id);
+    public boolean addCart(Cart cart);
 
 }

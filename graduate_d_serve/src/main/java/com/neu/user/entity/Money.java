@@ -12,15 +12,15 @@ public class Money {
     @ApiModelProperty("用户的资产id")
     private String mid;
     @ApiModelProperty("用户的原有总资产")
-    private String  totalmoney;
+    private double totalmoney;
     @ApiModelProperty("用户的收入")
-    private String income;
+    private double income;
     @ApiModelProperty("用户的支出")
-    private String pay;
+    private double pay;
     @ApiModelProperty("用户的余额")
-    private String balance;
+    private double balance;
 
-    public Money(String mid, String totalmoney, String income, String pay, String balance) {
+    public Money(String mid, double totalmoney, double income, double pay, double balance) {
         this.mid = mid;
         this.totalmoney = totalmoney;
         this.income = income;
@@ -39,35 +39,35 @@ public class Money {
         this.mid = mid;
     }
 
-    public String getTotalmoney() {
+    public double getTotalmoney() {
         return totalmoney;
     }
 
-    public void setTotalmoney(String totalmoney) {
+    public void setTotalmoney(double totalmoney) {
         this.totalmoney = totalmoney;
     }
 
-    public String getIncome() {
+    public double getIncome() {
         return income;
     }
 
-    public void setIncome(String income) {
+    public void setIncome(double income) {
         this.income = income;
     }
 
-    public String getPay() {
+    public double getPay() {
         return pay;
     }
 
-    public void setPay(String pay) {
+    public void setPay(double pay) {
         this.pay = pay;
     }
 
-    public String getBalance() {
+    public double getBalance() {
         return balance;
     }
 
-    public void setBalance(String balance) {
+    public void setBalance(double balance) {
         this.balance = balance;
     }
 }

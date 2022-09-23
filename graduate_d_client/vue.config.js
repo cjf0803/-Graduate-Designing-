@@ -16,6 +16,10 @@ module.exports = defineConfig({
         target: 'https://restapi.amap.com/v3/weather/weatherInfo?city=330300&key=b36923bbbb20e23142f1d33ca8dc8ff6',//天气接口域名
         pathRewrite: { '^/api': '' },
       },
+      '/pay': {
+        target: 'http://localhost:8081/zhifu/alipay/',
+        pathRewrite: { '^/pay': '' },
+      },
     },
   },
 

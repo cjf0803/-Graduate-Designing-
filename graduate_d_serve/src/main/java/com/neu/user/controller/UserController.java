@@ -1,6 +1,7 @@
 package com.neu.user.controller;
 
 import com.neu.user.biz.UserBiz;
+import com.neu.user.entity.Money;
 import com.neu.user.entity.Role;
 import com.neu.user.entity.State;
 import com.neu.user.entity.User;
@@ -122,6 +123,11 @@ public class UserController {
         User user = userBiz.findByUsername((String) request.getSession().getAttribute("username"));
         return user;
     }
+    @ApiOperation("根据moneyid查询用户资产接口")
+    @GetMapping(value="/findByMoneyid/{mid}")
+    public Money findByMoneyid(@ApiParam("查询的参数") @PathVariable("mid") String mid) {
+        return userBiz.findByMoneyid(mid);
+    }
     @ApiOperation("根据id修改用户状态")
     @GetMapping(value="/updateState/{id}/{state}")
     public boolean updateState(@ApiParam("修改状态的参数") @PathVariable("id") String id,@PathVariable("state") Integer state){
@@ -169,7 +175,34 @@ public class UserController {
         return  map;
 
     }
+    @ApiOperation("查询普通用户资产")
+    @GetMapping(value="/findCustomer")
+    public  Map<String,Object> findCustomer(){
+        Map<String,Object> map=new HashMap<String,Object>();
+        List<User> list= userBiz.findCustomer();
+        map.put("list",list);
+        return map;
 
+    }
+    @ApiOperation("根据用户资产id修改用户金额")
+    @GetMapping(value="/updateMoney/{mid}/{money}")
+    public  boolean updateMoney(@ApiParam("参数") @PathVariable("mid") String mid ,@PathVariable("money") double money){
+        //再根据得到的资产id，查出用户资产表中的数据
+        Money money1 = userBiz.findByMoneyid(mid);
+        //用户总资产
+        double Totalmoney=money1.getTotalmoney();
+        //用户余额
+        double balance=money1.getBalance();
+        //用户支出
+        double pay=money1.getPay();
+        //用户收入
+        double income=money1.getIncome();
+        //添加完金额后的资产和余额
+        double recentTotalmoney=Totalmoney+money;
+        double recentbalance=balance+money;
+        Money money2=new Money(mid,recentTotalmoney,income,pay,recentbalance);
+        return userBiz.updateMoney(money2);
+    }
 
 
 }

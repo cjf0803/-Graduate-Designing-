@@ -1,12 +1,14 @@
 <template>
   <div>
     <!-- 面包屑 -->
-    <el-breadcrumb>
+    <!-- <el-breadcrumb>
       <el-breadcrumb-item :to="{ path: 'home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/index' }">用户列表</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/findUserMo' }">模糊查询</el-breadcrumb-item>
       <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
-    </el-breadcrumb>
+    </el-breadcrumb> -->
+    <el-page-header @back="goBack" content="查询页面">
+    </el-page-header>
     <div class="flex">
       <div class="input_box">
         <el-input
@@ -68,7 +70,6 @@
             inactive-color="orange"
             active-value="正常"
             inactive-value="停用"
-            disabled
           ></el-switch>
         </template>
       </el-table-column>
@@ -159,6 +160,9 @@ export default {
       });
   },
   methods: {
+    goBack() {
+        this.$router.push({name:"index"})
+      },
     changePage: function (index) {
       this.$http
         .get("http://localhost:8081/user/findUserMo/" + index+"/"+this.$route.params.keywords)

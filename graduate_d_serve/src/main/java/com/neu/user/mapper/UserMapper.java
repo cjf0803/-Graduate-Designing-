@@ -1,5 +1,6 @@
 package com.neu.user.mapper;
 
+import com.neu.user.entity.Money;
 import com.neu.user.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,6 +22,7 @@ public interface UserMapper {
     public boolean deleteUser(String id);
     public boolean updateUser(User user);
     public  List<HashMap<String, Object>> findById(String id);
+    public  List<HashMap<String, Object>> findByUsername1(String username);
     public User findByUsername(String username);
     public boolean updateUserByUsername(User user);
     public boolean updateState(User user);
@@ -29,5 +31,9 @@ public interface UserMapper {
     public int countMo(Map<String,Object> map);
     public void addMoney();
     public boolean updateRoleById(Map<String, Object> map);
+    public Money findByMoneyid(String mid);
+    public boolean updateMoney(Money money);
+    public List<User> findCustomer();
+
 
 }

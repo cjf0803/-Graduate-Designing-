@@ -23,8 +23,21 @@ public class RecentlyRate {
     private String sep;
     @ApiModelProperty("产品十一月收益率")
     private String nov;
+    @ApiModelProperty("产品的名称")
+    private String rname;
 
     public RecentlyRate() {
+    }
+
+    public RecentlyRate(String rid, String jan, String mar, String may, String july, String sep, String nov, String rname) {
+        this.rid = rid;
+        this.jan = jan;
+        this.mar = mar;
+        this.may = may;
+        this.july = july;
+        this.sep = sep;
+        this.nov = nov;
+        this.rname = rname;
     }
 
     public RecentlyRate(String rid, String jan, String mar, String may, String july, String sep, String nov) {
@@ -91,5 +104,13 @@ public class RecentlyRate {
 
     public void setNov(String nov) {
         this.nov = nov;
+    }
+
+    public String getRname() {
+        return rname;
+    }
+
+    public void setRname(String rname) {
+        this.rname = rname;
     }
 }

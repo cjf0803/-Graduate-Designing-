@@ -116,7 +116,7 @@
         <div class="panel left-panel">
           <div class="content">
             <h3 style="margin-bottom:40px">管理员登陆界面</h3>
-            <el-link  style="font-size:20px;"><router-link to="/frontIndex"  style="color:aliceblue"><i class="el-icon-view el-icon--right"></i>Go 首页！</router-link></el-link>
+            <el-link  style="font-size:20px;"><router-link to="/frontLogin"  style="color:aliceblue"><i class="el-icon-view el-icon--right"></i>Go 首页！</router-link></el-link>
           </div>
           <img src="../../assets/img/log.svg" class="image" alt="" />
         </div>

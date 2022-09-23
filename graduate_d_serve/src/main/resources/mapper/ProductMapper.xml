@@ -40,7 +40,7 @@
 
         </association>
     </resultMap>
-    <!--   查询所有用户-->
+    <!--   查询所有产品-->
     <select id="findProduct" resultMap="productResult">
   			<![CDATA[
             select b.* from
@@ -53,6 +53,38 @@
     <!-- 查询总记录数 -->
     <select id="countProduct" resultType="int">
         select count(1) from g_d_product
+    </select>
+
+<!--    根据类型查询产品-->
+    <select id="findProductByType"  resultMap="productResult">
+        <![CDATA[
+        select b.* from
+            (select p.*,t.*,s.*,m.*,e.*,rownum r from g_d_product p ,g_d_p_type t ,g_d_p_state s,g_d_p_manager m,g_d_p_recentlyrate e
+             where p.ptype=#{ptype} and p.ptype=t.tid and p.pstate=s.sid and p.pmanager=m.mid and p.recentlyRate=e.rid) b
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+
+        ]]>
+    </select>
+    <!--    普通用户根据类型查询产品（不分页）-->
+    <select id="CustomerfindProductByType"  resultMap="productResult">
+
+       select p.*,t.*,s.*,m.*,e.*,rownum r from g_d_product p ,g_d_p_type t ,g_d_p_state s,g_d_p_manager m,g_d_p_recentlyrate e
+             where p.ptype=#{ptype} and p.ptype=t.tid and p.pstate=s.sid and p.pmanager=m.mid and p.recentlyRate=e.rid
+
+
+    </select>
+
+    <!--    普通用户根据id查询产品-->
+    <select id="CustomerfindProductById"  resultMap="productResult">
+
+        select p.*,t.*,s.*,m.*,e.*,rownum r from g_d_product p ,g_d_p_type t ,g_d_p_state s,g_d_p_manager m,g_d_p_recentlyrate e
+        where p.id=#{id} and p.ptype=t.tid and p.pstate=s.sid and p.pmanager=m.mid and p.recentlyRate=e.rid
+
+
+    </select>
+    <!--根据类型查询产品总记录数 -->
+    <select id="countProductByType"  resultType="int" >
+        select count(1) from g_d_product where ptype=#{ptype}
     </select>
 
     <!--根据id删除记录-->
@@ -110,9 +142,15 @@
     <update id="updateState" parameterType="com.neu.product.entity.Product">
         update g_d_product set pstate=#{pstate.sid} where id=#{id}
     </update>
-    <!--  添加产品时同时添加产品的近期收益率id-->
-    <insert id="addRecentlyRate">
-        insert  into g_d_p_recentlyrate(rid,jan,mar,may,july,sep,nov)
-        values(seq_g_d_p_ra.nextval,null,null,null,null,null,null)
+    <!--  添加产品时同时添加产品的近期收益率id和产品名称-->
+    <insert id="addRecentlyRate" parameterType="com.neu.product.entity.RecentlyRate">
+        insert  into g_d_p_recentlyrate(rid,jan,mar,may,july,sep,nov,rname)
+        values(seq_g_d_p_ra.nextval,null,null,null,null,null,null,#{rname})
     </insert>
+<!--    在详情页添加产品到预购中-->
+    <insert id="addCart" parameterType="com.neu.cart.entity.Cart">
+        insert into g_d_u_cart(cid,username,pimg,pname,price,averagerate,pnum,sum)
+        values(seq_g_d_u_cart.nextval,#{username},#{pimg},#{pname},#{price},#{averagerate},#{pnum},#{sum})
+    </insert>
+
 </mapper>

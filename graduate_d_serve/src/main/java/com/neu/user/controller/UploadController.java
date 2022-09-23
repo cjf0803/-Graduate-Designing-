@@ -13,17 +13,34 @@ import java.io.IOException;
  * @author 陈锦房
  */
 @Controller
-@RequestMapping("user")
+@RequestMapping("upload")
 public class UploadController {
-    @RequestMapping(value = "upload")
+    @RequestMapping(value = "user")
     @ResponseBody
-    public String upload(MultipartFile file, HttpServletRequest request) throws IOException {
+    public String user(MultipartFile file, HttpServletRequest request) throws IOException {
         String fileName = "";
         if (!file.isEmpty()) {
             //获取文件名
             fileName =file.getOriginalFilename();
             //获取根目录路径
             String path=request.getServletContext().getRealPath("/image/user");
+            //将文件名和绝对路径拼起来
+            File filePath=new File(path,fileName);
+            //将文件上传的磁盘中
+            file.transferTo(filePath);
+
+        }
+        return fileName;
+    }
+    @RequestMapping(value = "product")
+    @ResponseBody
+    public String product(MultipartFile file, HttpServletRequest request) throws IOException {
+        String fileName = "";
+        if (!file.isEmpty()) {
+            //获取文件名
+            fileName =file.getOriginalFilename();
+            //获取根目录路径
+            String path=request.getServletContext().getRealPath("/image/product");
             //将文件名和绝对路径拼起来
             File filePath=new File(path,fileName);
             //将文件上传的磁盘中

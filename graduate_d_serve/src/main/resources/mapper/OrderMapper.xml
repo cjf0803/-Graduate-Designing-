@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.order.mapper.OrderMapper">
+    <!--外部映射  -->
+    <resultMap type="com.neu.order.entity.Order" id="orderResult">
+        <result column="oid" property="oid" /> <!--property代表实体类属性  -->
+        <result column="username" property="username" />
+        <result column="totalsum" property="totalsum" />
+        <result column="exincome" property="exincome" />
+        <result column="time" property="time" />
+        <result column="executetime" property="executetime" />
+        <result column="author" property="author" />
+        <association property="payWay" javaType="com.neu.order.entity.Pay">
+            <result column="pid" property="pid" />
+            <result column="pname" property="pname" />
+            <result column="pdesc" property="pdesc" />
+        </association>
+        <association property="state" javaType="com.neu.order.entity.State">
+            <result column="sid" property="sid" />
+            <result column="sname" property="sname" />
+            <result column="pdesc" property="pdesc" />
+        </association>
+    </resultMap>
+    <!--   查询所有订单-->
+    <select id="findOrder" resultMap="orderResult">
+  			<![CDATA[
+            select b.* from
+            (select o.*,p.pname,s.sname,s.sid,rownum r from g_d_order o ,g_d_o_pay p ,g_d_o_state s
+             where o.payway=p.pid and o.state=s.sid ) b
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+
+        ]]>
+    </select>
+    <!-- 查询总记录数 -->
+    <select id="countOrder" resultType="int">
+        select count(1) from g_d_order
+    </select>
+
+    <!--    根据状态查询订单-->
+    <select id="findOrderByState"  resultMap="orderResult">
+        <![CDATA[
+            select b.* from
+            (select o.*,p.pname,s.sname,s.sid,rownum r from g_d_order o ,g_d_o_pay p ,g_d_o_state s
+             where o.state=#{state} and o.payway=p.pid and o.state=s.sid ) b
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+
+        ]]>
+    </select>
+    <!--根据状态查询订单数 -->
+    <select id="countOrderByState"  resultType="int" >
+        select count(1) from g_d_order where state=#{state}
+    </select>
+    <!--根据id删除记录-->
+    <delete id="deleteOrder" parameterType="com.neu.order.entity.Order">
+        delete from g_d_order where oid=#{oid}
+    </delete>
+    <!--  模糊查询-->
+    <sql id="sql1">
+        select d.* from
+            ( select o.*,p.pname,s.sname,s.sid,rownum r from g_d_order o ,g_d_o_pay p ,g_d_o_state s
+             where o.payway=p.pid and o.state=s.sid
+    </sql>
+    <sql id="sql2">
+        <![CDATA[
+        )d
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+    </sql>
+    <select id="findOrderMo"  resultMap="orderResult">
+        <include refid="sql1"></include>
+        <if test="username!=null and username!=''">
+            and username like '%${username}%'
+        </if>
+        <include refid="sql2"></include>
+    </select>
+
+    <!-- 模糊查询总记录数-->
+    <select id="countMo" resultType="int">
+        select count(*) from g_d_order
+        <where>
+            <if test="username!=null and  username!=''">
+                username like '%${username}%'
+            </if>
+        </where>
+    </select>
+    <!--    批量删除数据-->
+    <delete id="delOrderAll" parameterType="com.neu.order.entity.Order">
+        delete from g_d_order where oid in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+
+    </delete>
+
+<!--   根据订单id修改执行时间和执行者 -->
+    <update id="updateTwo" parameterType="com.neu.order.entity.Order">
+            update g_d_order set executetime=sysdate,author=#{author}
+            where oid=#{oid}
+    </update>
+<!--根据订单id查询数据-->
+    <select id="findById" resultType="com.neu.order.entity.Order">
+        select * from g_d_order where oid=#{oid}
+    </select>
+<!--    订单完成后修改订单状态为已完成订单-->
+    <update id="updateSuccess">
+        update g_d_order set state='3' where oid=#{oid}
+    </update>
+<!--    根据用户名查询订单-->
+    <select id="findOrderByUsername" resultMap="orderResult">
+       <![CDATA[
+        select b.* from
+            (select o.*,p.pname,s.sname,s.sid,rownum r from g_d_order o ,g_d_o_pay p ,g_d_o_state s
+             where o.username=#{username} and o.payway=p.pid and o.state=s.sid ) b
+        where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+
+        ]]>
+    </select>
+    <!-- 根据用户名查询总记录数 -->
+    <select id="countOrderByUsername" resultType="int">
+        select count(1) from g_d_order where username=#{username}
+    </select>
+</mapper>

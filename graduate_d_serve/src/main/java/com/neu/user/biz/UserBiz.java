@@ -1,5 +1,6 @@
 package com.neu.user.biz;
 
+import com.neu.user.entity.Money;
 import com.neu.user.entity.User;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ public interface UserBiz {
     public boolean deleteUser(String id);
     public boolean updateUser(User user);
     public List<HashMap<String, Object>> findById(String id);
+    public  List<HashMap<String, Object>> findByUsername1(String username);
     public User findByUsername(String username);
     public boolean updateUserByUsername(User user);
     public boolean updateState(User user);
@@ -26,4 +28,7 @@ public interface UserBiz {
     public int countMo(String username);
     public void addMoney();
     public boolean updateRoleById(String rid);
+    public Money findByMoneyid(String mid);
+    public boolean updateMoney(Money money);
+    public List<User> findCustomer();
 }

@@ -1,7 +1,9 @@
 package com.neu.product.biz.Impl;
 
+import com.neu.cart.entity.Cart;
 import com.neu.product.biz.ProductBiz;
 import com.neu.product.entity.Product;
+import com.neu.product.entity.RecentlyRate;
 import com.neu.product.mapper.ProductMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,7 +79,38 @@ public class ProductBizImpl implements ProductBiz {
     }
 
     @Override
-    public void addRecentlyRate() {
-        productMapper.addRecentlyRate();
+    public void addRecentlyRate(RecentlyRate recentlyRate) {
+        productMapper.addRecentlyRate(recentlyRate);
+    }
+
+    @Override
+    public List<Product> findProductByType(int index, int size, String ptype) {
+        Map<String,Object> map =new HashMap<String,Object>();
+        map.put("index",index);
+        map.put("size",size);
+        map.put("ptype",ptype);
+        List<Product> list =productMapper.findProductByType(map);
+        return list;
+    }
+
+    @Override
+    public int countProductByType(String ptype) {
+        return productMapper.countProductByType(ptype);
+    }
+
+    @Override
+    public List<Product> CustomerfindProductByType(String ptype) {
+        return productMapper.CustomerfindProductByType(ptype);
+
+    }
+
+    @Override
+    public List<Product> CustomerfindProductById(String id) {
+        return productMapper.CustomerfindProductById(id);
+    }
+
+    @Override
+    public boolean addCart(Cart cart) {
+        return productMapper.addCart(cart);
     }
 }

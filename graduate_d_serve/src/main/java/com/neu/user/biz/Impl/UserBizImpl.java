@@ -1,6 +1,7 @@
 package com.neu.user.biz.Impl;
 
 import com.neu.user.biz.UserBiz;
+import com.neu.user.entity.Money;
 import com.neu.user.entity.User;
 import com.neu.user.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,11 @@ public class UserBizImpl implements UserBiz {
     }
 
     @Override
+    public List<HashMap<String, Object>> findByUsername1(String username) {
+        return userMapper.findByUsername1(username);
+    }
+
+    @Override
     public User findByUsername(String username) {
         return userMapper.findByUsername(username);
     }
@@ -107,5 +113,20 @@ public class UserBizImpl implements UserBiz {
         Map<String,Object> map=new HashMap<String,Object>();
         map.put("rid",rid);
         return userMapper.updateRoleById(map);
+    }
+
+    @Override
+    public Money findByMoneyid(String mid) {
+        return userMapper.findByMoneyid(mid);
+    }
+
+    @Override
+    public boolean updateMoney(Money money) {
+        return userMapper.updateMoney(money);
+    }
+
+    @Override
+    public List<User> findCustomer() {
+        return userMapper.findCustomer();
     }
 }

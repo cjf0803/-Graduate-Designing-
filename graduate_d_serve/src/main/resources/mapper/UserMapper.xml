@@ -85,6 +85,19 @@
     <select id="findByUsername" resultType="com.neu.user.entity.User">
         select * from g_d_user where username=#{username}
     </select>
+    <!--根据username查询数据（供管理员订单完成）  -->
+    <select id="findByUsername1" resultType="java.util.HashMap">
+        select * from g_d_user where username=#{username}
+    </select>
+<!--    根据moneyid查询记录-->
+    <select id="findByMoneyid" resultType="com.neu.user.entity.Money">
+        select * from g_d_u_money where mid=#{mid}
+    </select>
+<!--    根据moneyid去修改用户资产-->
+    <update id="updateMoney" parameterType="com.neu.user.entity.Money">
+        update g_d_u_money set totalmoney=#{totalmoney},income=#{income},pay=#{pay},balance=#{balance}
+        where mid=#{mid}
+    </update>
 <!-- 根据id修改状态-->
     <update id="updateState" parameterType="com.neu.user.entity.User">
         update g_d_user set state=#{state.sid} where id=#{id}
@@ -132,4 +145,11 @@
     <update id="updateRoleById" parameterType="map">
         update g_d_user set role_id='0' where role_id=#{rid}
     </update>
+<!--    查询普通用户的资产-->
+    <select id="findCustomer" resultMap="userResult">
+        select m.*,u.*
+        from g_d_user u,g_d_u_money m
+        where u.moneyid=m.mid
+          and u.role_id='0'
+    </select>
 </mapper>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.cart.mapper.CartMapper">
+    <!--   查询所有用户预购-->
+    <select id="findCart" resultType="com.neu.cart.entity.Cart">
+  			<![CDATA[
+        select b.*
+        from (select p.*, rownum r from g_d_u_cart p ) b
+        where r > (#{index} - 1) * #{size}
+          and r <= #{index} * #{size}
+        ]]>
+    </select>
+    <!-- 查询总记录数 -->
+    <select id="countCart" resultType="int">
+        select count(1)
+        from g_d_u_cart
+    </select>
+    <!--   根据用户查询预购-->
+    <select id="findCartByUsername" resultType="com.neu.cart.entity.Cart">
+  			<![CDATA[
+        select b.*
+        from (select p.*, rownum r from g_d_u_cart p where p.username=#{username}) b
+        where r > (#{index} - 1) * #{size}
+          and r <= #{index} * #{size}
+        ]]>
+    </select>
+    <!-- 根据用户名查询总记录数 -->
+    <select id="countCartByUsername" resultType="int">
+        select count(1)
+        from g_d_u_cart
+        where username = #{username}
+    </select>
+
+    <!--根据id删除记录-->
+    <delete id="deleteCart" parameterType="com.neu.cart.entity.Cart">
+        delete
+        from g_d_u_cart
+        where cid = #{cid}
+
+    </delete>
+
+<!--   根据id修改购入份数-->
+    <update id="updateNumById" parameterType="com.neu.cart.entity.Cart">
+        update g_d_u_cart set pnum=#{pnum} where cid=#{cid}
+    </update>
+<!--当修改份数的同时修改小计-->
+    <update id="updateSumById" parameterType="com.neu.cart.entity.Cart">
+        update g_d_u_cart set sum=#{sum} where cid=#{cid}
+    </update>
+<!--    根据id查询数据-->
+    <select id="findById" resultType="com.neu.cart.entity.Cart">
+        select * from g_d_u_cart where cid=#{cid}
+    </select>
+<!--    批量删除数据-->
+    <delete id="delCartAll" parameterType="com.neu.cart.entity.Cart">
+        delete from g_d_u_cart where cid in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+
+    </delete>
+<!--    根据产品名字查询信息-->
+    <select id="findByPname" resultType="com.neu.cart.entity.Cart" >
+        select * from g_d_u_cart where pname=#{pname} and username=#{username}
+    </select>
+<!--    根据产品名字判断是否存在同种产品去修改购入份数和小计-->
+    <update id="updateCart" parameterType="com.neu.cart.entity.Cart">
+        update  g_d_u_cart set pnum=#{pnum},sum=#{sum} where pname=#{pname}
+    </update>
+    <!--计算预购中心总价-->
+    <select id="totalSum" resultType="double">
+        select sum(sum) from g_d_u_cart where username=#{username}
+    </select>
+<!--    添加到订单表中-->
+    <insert id="addOrder" parameterType="map" >
+        insert into g_d_order(oid,username,totalsum,exincome,time,payway,state,executetime,author)
+        values(seq_g_d_order.nextval,#{username},#{totalsum},#{exincome},sysdate,#{payway},'2',null,null)
+    </insert>
+    <!--    添加已取消订单到订单表中-->
+    <insert id="addCancelOrder" parameterType="map" >
+        insert into g_d_order(oid,username,totalsum,exincome,time,payway,state,executetime,author)
+        values(seq_g_d_order.nextval,#{username},#{totalsum},#{exincome},sysdate,#{payway},'1',null,null)
+    </insert>
+    <!--根据用户名计算预购中心平均收益率-->
+    <select id="avg" resultType="double">
+        select avg(averagerate) from g_d_u_cart where username=#{username}
+    </select>
+    <!--  模糊查询-->
+    <sql id="sql1">
+        select d.* from
+            ( select p.*, rownum r from g_d_u_cart p
+    </sql>
+    <sql id="sql2">
+        <![CDATA[
+        )d
+            where r>(#{index}-1)*#{size} and r<=#{index}*#{size}
+        ]]>
+    </sql>
+    <select id="findCartMo" resultType="com.neu.cart.entity.Cart">
+        <include refid="sql1"></include>
+        <where>
+        <if test="username!=null and username!=''">
+            and username like '%${username}%'
+        </if>
+        </where>
+        <include refid="sql2"></include>
+    </select>
+
+    <!-- 模糊查询总记录数-->
+    <select id="countMo" resultType="int">
+        select count(*) from g_d_u_cart
+        <where>
+            <if test="username!=null and  username!=''">
+                username like '%${username}%'
+            </if>
+        </where>
+    </select>
+</mapper>

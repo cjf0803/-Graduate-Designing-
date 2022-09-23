@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.product.mapper.RecentlyRateMapper">
+    <!--   查询所有近期收益率的数据-->
+    <select id="findAll" resultType="com.neu.product.entity.RecentlyRate" parameterType="map">
+  			<![CDATA[
+        select b.*
+        from (select e.*, rownum r from g_d_p_recentlyrate e) b
+        where r > (#{index} - 1) * #{size}
+          and r <= #{index} * #{size}
+        ]]>
+    </select>
+    <!-- 查询总记录数 -->
+    <select id="count" resultType="int">
+        select count(1)
+        from g_d_p_recentlyrate
+    </select>
+
+    <!--根据id删除记录-->
+    <delete id="delete" parameterType="com.neu.product.entity.RecentlyRate">
+        delete
+        from g_d_p_recentlyrate
+        where rid = #{rid}
+
+    </delete>
+    <!-- 根据id修改记录-->
+    <update id="update" parameterType="com.neu.product.entity.RecentlyRate">
+        update g_d_p_recentlyrate
+        set jan=#{jan},
+            mar=#{mar},
+            may=#{may},
+            july=#{july},
+            sep=#{sep},
+            nov=#{nov}
+        where rid = #{rid}
+    </update>
+
+</mapper>

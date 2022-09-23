@@ -1,6 +1,8 @@
 package com.neu.product.biz;
 
+import com.neu.cart.entity.Cart;
 import com.neu.product.entity.Product;
+import com.neu.product.entity.RecentlyRate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,10 @@ public interface ProductBiz {
     public boolean addProduct(Product product);
     public List<Product> findProductMo(int index,int size,String pname);
     public int countMo(String pname);
-    public void addRecentlyRate();
-
+    public void addRecentlyRate(RecentlyRate recentlyRate);
+    public List<Product> findProductByType(int index,int size,String ptype);
+    public int countProductByType(String ptype);
+    public List<Product> CustomerfindProductByType(String ptype);
+    public List<Product> CustomerfindProductById(String id);
+    public boolean addCart(Cart cart);
 }

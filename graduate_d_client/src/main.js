@@ -3,11 +3,15 @@ import App from './App.vue'
 import router from './router'
 import axios from 'axios'
 import ElementUI from 'element-ui'
+import echarts from "echarts";
+import $ from 'jquery'
 import 'element-ui/lib/theme-chalk/index.css';
 import store from './store'
 import SlideVerify from 'vue-monoplasty-slide-verify';
 Vue.use(ElementUI);
 Vue.use(SlideVerify);
+Vue.use($);
+Vue.prototype.$echarts = echarts;
 //解决sessionid，如果是axios请求用下面的配置
 axios.defaults.withCredentials=true
 Vue.config.productionTip = false

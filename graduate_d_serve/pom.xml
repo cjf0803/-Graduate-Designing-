@@ -31,6 +31,11 @@
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.alipay.sdk</groupId>
+            <artifactId>alipay-sdk-java</artifactId>
+            <version>4.33.39.ALL</version>
+        </dependency>
 
         <!--用于编译jsp-->
         <dependency>

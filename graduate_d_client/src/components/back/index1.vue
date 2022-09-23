@@ -3,15 +3,19 @@
     <!--头部-->
     <el-header style="height: 100px">
       <div class="head-logo">
+        <router-link to="/home">
         <img src="@/assets/img/log.svg" />
+      </router-link>
         <span class="font">吾爱理财后台系统</span>
+     
       </div>
       <div class="head-button">
+      
         <el-image
           :src="require('@/assets/img/user/' + userData.img)"
           class="headimg"
         ></el-image>
-
+    
         <p
           style="
             float: left;
@@ -101,7 +105,7 @@
           <el-form-item class="userimg" prop="img">
             <el-upload
               class="upload-demo"
-              action="http://localhost:8081/user/upload"
+              action="http://localhost:8081/upload/user"
               :file-list="fileList"
               list-type="picture"
               :on-success="handleAvatarSuccess"
@@ -252,7 +256,7 @@
               <span>理财管理</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item index="bookIndex">
+            <el-menu-item index="productIndex">
               <template slot="title">
                 <!--图标-->
                 <div class="space">
@@ -262,69 +266,120 @@
                 </div>
               </template>
             </el-menu-item>
-            <el-menu-item index="addBook">
+            <el-menu-item>
               <template slot="title">
                 <!--图标-->
-                <div class="space">
-                  <i class="el-icon-document-add"></i>
-                  <!--文本-->
-                  <span>股票</span>
-                </div>
+                <router-link
+                  :to="{ path: '/findProductByType', query: { ptype: '2' } }"
+                >
+                  <div class="space">
+                    <i class="el-icon-document-add"></i>
+                    <!--文本-->
+                    <span>股票</span>
+                  </div>
+                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item index="findBookMo">
+            <el-menu-item>
               <template slot="title">
                 <!--图标-->
-                <div class="space">
-                  <i class="el-icon-loading"></i>
-                  <!--文本-->
-                  <span>基金</span>
-                </div>
+                <router-link
+                  :to="{ path: '/findProductByType', query: { ptype: '1' } }"
+                >
+                  <div class="space">
+                    <i class="el-icon-loading"></i>
+                    <!--文本-->
+                    <span>基金</span>
+                  </div>
+                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item index="zhaiquan">
+            <el-menu-item>
               <template slot="title">
                 <!--图标-->
-                <div class="space">
-                  <i class="el-icon-view"></i>
-                  <!--文本-->
-                  <span>债券</span>
-                </div>
+                <router-link
+                  :to="{ path: '/findProductByType', query: { ptype: '3' } }"
+                >
+                  <div class="space">
+                    <i class="el-icon-view"></i>
+                    <!--文本-->
+                    <span>债券</span>
+                  </div>
+                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item index="bank">
+            <el-menu-item>
               <template slot="title">
                 <!--图标-->
-                <div class="space">
-                  <i class="el-icon-c-scale-to-original"></i>
-                  <!--文本-->
-                  <span>银行</span>
-                </div>
+                <router-link
+                  :to="{ path: '/findProductByType', query: { ptype: '4' } }"
+                >
+                  <div class="space">
+                    <i class="el-icon-c-scale-to-original"></i>
+                    <!--文本-->
+                    <span>银行</span>
+                  </div>
+                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item index="baoxian">
+            <el-menu-item>
               <template slot="title">
                 <!--图标-->
-                <div class="space">
-                  <i class="el-icon-paperclip"></i>
-                  <!--文本-->
-                  <span>保险</span>
-                </div>
+                <router-link
+                  :to="{ path: '/findProductByType', query: { ptype: '5' } }"
+                >
+                  <div class="space">
+                    <i class="el-icon-paperclip"></i>
+                    <!--文本-->
+                    <span>保险</span>
+                  </div>
+                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item index="gold">
+            <el-menu-item>
+              <template slot="title">
+                <!--图标-->
+                <router-link
+                  :to="{ path: '/findProductByType', query: { ptype: '6' } }"
+                >
+                  <div class="space">
+                    <i class="el-icon-search"></i>
+                    <!--文本-->
+                    <span>黄金</span>
+                  </div>
+                </router-link>
+              </template>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+        <!--侧边栏菜单区域-->
+        <el-menu
+          background-color="#454b5d"
+          text-color="#fff"
+          active-text-color="#409eff"
+        >
+          <!--一级菜单-->
+          <el-submenu index="1">
+            <!--一级菜单模板区-->
+            <template slot="title">
+              <!--图标-->
+              <i class="el-icon-shopping-cart-full"></i>
+              <!--文本-->
+              <span>预购中心</span>
+            </template>
+            <!--二级菜单-->
+            <el-menu-item index="cartIndex">
               <template slot="title">
                 <!--图标-->
                 <div class="space">
-                  <i class="el-icon-search"></i>
+                  
                   <!--文本-->
-                  <span>黄金</span>
+                  <router-link to="/cartIndex"><i class="el-icon-place" ></i><span>管理</span></router-link>
                 </div>
               </template>
             </el-menu-item>
           </el-submenu>
         </el-menu>
-
         <!--侧边栏菜单区域-->
         <el-menu
           background-color="#454b5d"
@@ -342,7 +397,7 @@
               <span>订单管理</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item index="lendIndex">
+            <el-menu-item index="orderIndex">
               <template slot="title">
                 <!--图标-->
                 <div class="space">
@@ -352,40 +407,67 @@
                 </div>
               </template>
             </el-menu-item>
-
-            <el-menu-item index="findLendMo">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
+                <router-link
+                  :to="{ path: '/findOrderByState', query: { state: '0' } }"
+                >
                 <div class="space">
                   <i class="el-icon-lollipop"></i>
                   <!--文本-->
-                  <span>已完成订单</span>
+                  <span>等待中订单</span>
                 </div>
+                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item index="cancel">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
+                <router-link
+                  :to="{ path: '/findOrderByState', query: { state: '1' } }"
+                >
                 <div class="space">
                   <i class="el-icon-lollipop"></i>
                   <!--文本-->
                   <span>已取消订单</span>
                 </div>
+                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item index="pay">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
+                <router-link
+                  :to="{ path: '/findOrderByState', query: { state: '2' } }"
+                >
                 <div class="space">
                   <i class="el-icon-lollipop"></i>
                   <!--文本-->
                   <span>已支付订单</span>
                 </div>
+                </router-link>
               </template>
             </el-menu-item>
+            <el-menu-item >
+              <template slot="title">
+                <!--图标-->
+                <router-link
+                  :to="{ path: '/findOrderByState', query: { state: '3' } }"
+                >
+                <div class="space">
+                  <i class="el-icon-lollipop"></i>
+                  <!--文本-->
+                  <span>已完成订单</span>
+                </div>
+                </router-link>
+              </template>
+            </el-menu-item>
+           
           </el-submenu>
         </el-menu>
 
+        
         <!--侧边栏菜单区域-->
         <el-menu
           background-color="#454b5d"
@@ -393,55 +475,7 @@
           active-text-color="#409eff"
         >
           <!--一级菜单-->
-          <el-submenu index="1">
-            <!--一级菜单模板区-->
-            <template slot="title">
-              <!--图标-->
-              <i class="el-icon-shopping-cart-full"></i>
-              <!--文本-->
-              <span>公告管理</span>
-            </template>
-            <!--二级菜单-->
-            <el-menu-item index="1-4-1">
-              <template slot="title">
-                <!--图标-->
-                <div class="space">
-                  <i class="el-icon-menu"></i>
-                  <!--文本-->
-                  <span>公告</span>
-                </div>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="1-4-1">
-              <template slot="title">
-                <!--图标-->
-                <div class="space">
-                  <i class="el-icon-menu"></i>
-                  <!--文本-->
-                  <span>导航二</span>
-                </div>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="1-4-1">
-              <template slot="title">
-                <!--图标-->
-                <div class="space">
-                  <i class="el-icon-menu"></i>
-                  <!--文本-->
-                  <span>导航三</span>
-                </div>
-              </template>
-            </el-menu-item>
-          </el-submenu>
-        </el-menu>
-        <!--侧边栏菜单区域-->
-        <el-menu
-          background-color="#454b5d"
-          text-color="#fff"
-          active-text-color="#409eff"
-        >
-          <!--一级菜单-->
-          <el-submenu index="1">
+          <el-submenu >
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
@@ -450,34 +484,16 @@
               <span>数据统计</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item index="1-4-1">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
+                <router-link to='/echarts'>
                 <div class="space">
                   <i class="el-icon-menu"></i>
                   <!--文本-->
-                  <span>导航一</span>
+                  <span>图表总览</span>
                 </div>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="1-4-1">
-              <template slot="title">
-                <!--图标-->
-                <div class="space">
-                  <i class="el-icon-menu"></i>
-                  <!--文本-->
-                  <span>导航二</span>
-                </div>
-              </template>
-            </el-menu-item>
-            <el-menu-item index="1-4-1">
-              <template slot="title">
-                <!--图标-->
-                <div class="space">
-                  <i class="el-icon-menu"></i>
-                  <!--文本-->
-                  <span>导航三</span>
-                </div>
+              </router-link>
               </template>
             </el-menu-item>
           </el-submenu>
@@ -574,18 +590,21 @@
       <!--页面右侧区域-->
       <el-main>
         <!--路由的占位符-->
-        <router-view></router-view>
+        <keep-alive>
+          <router-view :key="key"></router-view>
+        </keep-alive>
+        
       </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-
 export default {
   name: "index1_v",
   data() {
     return {
+      ptype:'',
       rules: {
         password: [
           { required: true, message: "此项为必填项", trigger: "blur" },
@@ -633,6 +652,11 @@ export default {
       },
     };
   },
+   computed:{
+    key() {
+      return this.$route.path+Date.now()
+    }
+  },
   mounted() {
     this.username = this.$store.getters["uInfo/getUserInfo"].USERNAME;
     this.currentRole = this.$store.getters["uInfo/getUserInfo"].ROLE_ID;
@@ -647,6 +671,15 @@ export default {
         this.userData.email = res.data.email;
       }
     });
+  },
+  watch: {
+    // 监听路由是否变化
+    $route(to, from) {
+      if (to.query.ptype != from.query.ptype) {
+        this.ptype = to.query.ptype; // 把最新id赋值给定义在data中的id
+        this.init(); // 重新调用加载数据方法
+      }
+    },
   },
   methods: {
     handleAvatarSuccess(res, file) {
@@ -776,6 +809,13 @@ export default {
 }
 span {
   margin-left: 20px;
+  color: white;
+}
+.space i:hover {
+  color: aqua;
+}
+.space i:visited {
+  color: aqua;
 }
 .head-logo {
   display: flex;
@@ -807,6 +847,10 @@ span {
 .space {
   margin-left: 17px;
 }
+.space:hover {
+  color: aqua;
+}
+
 .font {
   font-family: sans-serif;
   font-weight: bolder;
@@ -828,5 +872,14 @@ span {
 }
 .userimg .upload {
   margin-right: 95px;
+}
+a {
+  text-decoration: none;
+  color: grey;
+}
+
+.router-link-active {
+  text-decoration: none;
+  color: aqua
 }
 </style>
