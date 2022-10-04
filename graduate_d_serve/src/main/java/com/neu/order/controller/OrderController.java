@@ -1,11 +1,10 @@
 package com.neu.order.controller;
 
 import com.neu.order.biz.OrderBiz;
+import com.neu.order.biz.OrderDetailBiz;
 import com.neu.order.entity.Order;
-import com.neu.product.entity.Product;
 import com.neu.user.biz.UserBiz;
 import com.neu.user.entity.Money;
-import com.neu.user.entity.User;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +28,8 @@ public class OrderController {
     private OrderBiz orderBiz;
     @Autowired
     private UserBiz userBiz;
+    @Autowired
+    private OrderDetailBiz orderDetailBiz;
     @ApiOperation("订单信息接口")
     @GetMapping(value = "/findOrder/{index}")
     public Map<String, Object> findOrder(@ApiParam("分页的参数") @PathVariable("index") Integer index) {
@@ -64,7 +66,9 @@ public class OrderController {
     @ApiOperation("根据id删除订单接口")
     @GetMapping(value = "/deleteOrder/{oid}")
     public boolean deleteProduct(@ApiParam("删除的参数") @PathVariable("oid") String oid) {
-        System.out.println(oid);
+       Order order= orderBiz.findById(oid);
+         String id=order.getDetail_id();
+        orderDetailBiz.deleteDetail(id);
         return orderBiz.deleteOrder(oid);
 
     }
@@ -90,6 +94,15 @@ public class OrderController {
     @ApiOperation("批量删除订单接口")
     @GetMapping(value="/delOrderAll/{ids}")
     public boolean delOrderAll(@ApiParam("删除的参数") @PathVariable("ids") String[] ids) {
+        HashSet<String> set = new HashSet<String>();//利用Hashset数组去重
+        for (String item:ids){
+            if(set.add(item)){
+                Order order= orderBiz.findById(item);
+                String id=order.getDetail_id();
+                orderDetailBiz.deleteDetail(id);
+            }
+
+        }
         return orderBiz.delOrderAll(ids);
 
     }
@@ -125,7 +138,7 @@ public class OrderController {
        double  recentTotalMoney=Totalmoney+exincome;
        double recentPay=pay+totalsum;
        double recentIncome=income+exincome;
-       double recentBalance=recentTotalMoney-recentPay+recentIncome;
+       double recentBalance=balance+exincome;
        Money money1=new Money(mid,recentTotalMoney,recentIncome,recentPay,recentBalance);
 
        //根据计算好的新总资产，收入，支出，余额，修改用户资产表中数据
@@ -147,6 +160,16 @@ public class OrderController {
         map.put("list",list);
         map.put("index",index);
         map.put("count",count);
+        return map;
+
+    }
+    @ApiOperation("根据当前用户名且状态为已完成订单查询接口")
+    @GetMapping(value="/findBySuccess")
+    public  Map<String, Object> findBySuccess(HttpServletRequest request) {
+        String username=(String) request.getSession().getAttribute("username");
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<Order> list=orderBiz.findBySuccess(username);
+        map.put("list",list);
         return map;
 
     }

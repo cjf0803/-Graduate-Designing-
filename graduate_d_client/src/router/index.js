@@ -28,7 +28,6 @@ import Bank from '../components/front/Bank.vue'
 import Insurance from '../components/front/Insurance.vue'
 import Gold from '../components/front/Gold.vue'
 import Personal from '../components/front/Personal.vue'
-import Pay from '../components/front/Pay/index.vue'
 import Order from '../components/front/order/index.vue'
 import Cart from '../components/front/Cart.vue'
 import sharesDetail from '../components/front/details/sharesDetail.vue'
@@ -138,11 +137,6 @@ const router = new VueRouter({
         path: '/goldDetail',
         name: 'goldDetail',
         component: goldDetail
-      },
-      {
-        path: '/pay',
-        name: 'Pay',
-        component: Pay
       },
       {
         path: '/order',

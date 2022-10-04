@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex" style="margin-bottom:20px">
+    <div class="flex" style="margin-bottom: 20px">
       <div class="input_box" style="width: 250px">
         <el-input
           v-model="keywords"
@@ -13,16 +13,50 @@
           </template>
         </el-input>
       </div>
+      <div style="margin-top: 15px; width: 66%">
+        <el-progress
+          :text-inside="true"
+          :stroke-width="26"
+          :percentage="70"
+          style="margin-top: 7px"
+        ></el-progress>
+        <el-progress
+          :text-inside="true"
+          :stroke-width="24"
+          :percentage="100"
+          status="success"
+          style="margin-top: 7px"
+        ></el-progress>
+        <el-progress
+          :text-inside="true"
+          :stroke-width="22"
+          :percentage="80"
+          status="warning"
+          style="margin-top: 7px"
+        ></el-progress>
+        <el-progress
+          :text-inside="true"
+          :stroke-width="20"
+          :percentage="50"
+          status="exception"
+          style="margin-top: 7px"
+        ></el-progress>
+      </div>
     </div>
+
     <el-table
       ref="tableData"
       :data="tableData"
       :row-key="getRowKeys"
       tooltip-effect="dark"
-      style="width: 100%; "
+      style="width: 100%"
       @selection-change="handleSelectionChange"
     >
-      <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
+      <el-table-column
+        type="selection"
+        width="55"
+        :reserve-selection="true"
+      ></el-table-column>
       <el-table-column label="产品图片" width="120">
         <template slot-scope="scope">
           <img
@@ -82,7 +116,9 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button @click="delAll" style="float: left; margin-left: 12px; margin-top: 15px"
+    <el-button
+      @click="delAll"
+      style="float: left; margin-left: 12px; margin-top: 15px"
       >批量删除</el-button
     >
     <el-button
@@ -91,7 +127,7 @@
       >清空选择</el-button
     >
 
-    <div class="fenye" style="margin-top: 20px;text-align: right;">
+    <div class="fenye" style="margin-top: 20px; text-align: right">
       <!-- 分页 -->
 
       <el-pagination
@@ -126,7 +162,7 @@ export default {
       total: 1,
       pageSize: 1,
       currentPage: 1,
-      keywords:"",
+      keywords: "",
       tableData: [
         {
           cid: "",
@@ -150,7 +186,7 @@ export default {
     });
   },
   methods: {
-    delAll:function () {
+    delAll: function () {
       this.$confirm("批量删除数据, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -167,7 +203,7 @@ export default {
               if (res != null) {
                 this.$message({
                   showClose: true,
-                  message: "删除成功",
+                  message: "批量删除成功！",
                   type: "success",
                 });
                 this.reload();
@@ -181,7 +217,7 @@ export default {
           });
         });
     },
-    
+
     clear() {
       this.clearSelection();
     },
@@ -195,10 +231,9 @@ export default {
     clearSelection() {
       this.$nextTick(() => {
         this.$refs.tableData.clearSelection(); //elementUI 官方文档的方法 不过直接使用会报错
-        this.multipleSelection=[];
+        this.multipleSelection = [];
       });
     },
-   
 
     handleSelectionChange(val) {
       //this.multipleSelection = val // 返回的是选中的列的数组集合

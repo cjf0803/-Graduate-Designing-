@@ -5,48 +5,47 @@
         class="margin-top"
         title="实时信息"
         :column="3"
-        :size="size"
+       
       >
         <template slot="extra">
           <el-button type="primary" size="small">操作</el-button>
         </template>
         <el-descriptions-item label="地点"
           ><el-tag size="small"
-            >{{ weather[0].province }}{{ weather[0].city }}</el-tag
+            >浙江省{{ weather[0].city }}市</el-tag
           ></el-descriptions-item
         >
-        <el-descriptions-item label="天气">{{
-          weather[0].weather
-        }}</el-descriptions-item>
-        <el-descriptions-item label="温度"
-          >{{ weather[0].temperature }}℃</el-descriptions-item
-        >
+        <el-descriptions-item label="天气">
+          <el-tag type="warning" size="small"> {{ weather[0].weather }}</el-tag>
+        </el-descriptions-item>
+        <el-descriptions-item label="温度">
+          <el-tag type="success" size="small"
+            >{{ weather[0].temperature }}℃</el-tag
+          >
+        </el-descriptions-item>
         <el-descriptions-item label="当前时间">
           {{ currentDate }}
         </el-descriptions-item>
-        <el-descriptions-item label="风向">{{
-          weather[0].winddirection
-        }}</el-descriptions-item>
-        <el-descriptions-item label="风力">{{
-          weather[0].windpower
-        }}</el-descriptions-item>
+        <el-descriptions-item label="最近更新时间">
+          {{ weather[0].last_update }}
+      
+        </el-descriptions-item>
       </el-descriptions>
     </div>
     <el-divider></el-divider>
     <div id="main1" style="width: 100%; height: 600px"></div>
+    <el-divider></el-divider>
     <div
       id="employeeSex"
       style="width: 100%; height: 500px; margin-bottom: 50px"
     ></div>
+    <el-divider></el-divider>
     <div id="main" style="width: 600px; height: 400px; float: left"></div>
-
     <el-steps :active="1">
       <el-step title="Plan 1" icon="el-icon-edit"></el-step>
       <el-step title="Plan 2" icon="el-icon-upload"></el-step>
       <el-step title="Plan 3" icon="el-icon-picture"></el-step>
     </el-steps>
-
-    <el-divider></el-divider>
     <div class="block">
       <el-timeline>
         <el-timeline-item timestamp="2018/4/12" placement="top">
@@ -70,7 +69,6 @@
       </el-timeline>
     </div>
     <el-divider></el-divider>
-
     <el-row>
       <el-col :sm="12" :lg="6">
         <el-result
@@ -109,13 +107,13 @@
         </el-result>
       </el-col>
     </el-row>
-    <el-steps :active="active" finish-status="success">
+    <el-steps  finish-status="success">
       <el-step title="步骤 1"></el-step>
       <el-step title="步骤 2"></el-step>
       <el-step title="步骤 3"></el-step>
     </el-steps>
 
-    <el-button style="margin-top: 12px" @click="next">下一步</el-button>
+    <el-button style="margin-top: 12px" >下一步</el-button>
   </div>
 </template>
 
@@ -127,11 +125,10 @@ export default {
       weather: [
         {
           city: "",
-          province: "",
           weather: "",
           temperature: "",
-          winddirection: "",
-          windpower: "",
+          code: "",
+          last_update: "",
         },
       ],
       currenttime: "",
@@ -145,12 +142,12 @@ export default {
     initEmployeeSex() {
       //  let recentlyRate=[];
       let pname = [];
-      let jan=[];
-      let mar=[];
-      let may=[];
-      let july=[];
-      let sep=[];
-      let nov=[];
+      let jan = [];
+      let mar = [];
+      let may = [];
+      let july = [];
+      let sep = [];
+      let nov = [];
       this.$http
         .get("http://localhost:8081/product/findProduct/1")
         .then((req) => {
@@ -211,7 +208,7 @@ export default {
               yAxis: [
                 {
                   type: "value",
-                 
+
                   axisTick: {
                     inside: true,
                   },
@@ -252,7 +249,12 @@ export default {
                     // req.data.list[0].recentlyRate.july,
                     // req.data.list[0].recentlyRate.sep,
                     // req.data.list[0].recentlyRate.nov,
-                    jan[0],mar[0],may[0],july[0],sep[0],nov[0]
+                    jan[0],
+                    mar[0],
+                    may[0],
+                    july[0],
+                    sep[0],
+                    nov[0],
                   ],
                 },
                 {
@@ -287,7 +289,12 @@ export default {
                     // req.data.list[1].recentlyRate.july,
                     // req.data.list[1].recentlyRate.sep,
                     // req.data.list[1].recentlyRate.nov,
-                    jan[1],mar[1],may[1],july[1],sep[1],nov[1]
+                    jan[1],
+                    mar[1],
+                    may[1],
+                    july[1],
+                    sep[1],
+                    nov[1],
                   ],
                 },
                 {
@@ -322,7 +329,12 @@ export default {
                     // req.data.list[2].recentlyRate.july,
                     // req.data.list[2].recentlyRate.sep,
                     // req.data.list[2].recentlyRate.nov,
-                    jan[2],mar[2],may[2],july[2],sep[2],nov[2]
+                    jan[2],
+                    mar[2],
+                    may[2],
+                    july[2],
+                    sep[2],
+                    nov[2],
                   ],
                 },
                 {
@@ -357,7 +369,12 @@ export default {
                     // req.data.list[3].recentlyRate.july,
                     // req.data.list[3].recentlyRate.sep,
                     // req.data.list[3].recentlyRate.nov,
-                    jan[3],mar[3],may[3],july[3],sep[3],nov[3]
+                    jan[3],
+                    mar[3],
+                    may[3],
+                    july[3],
+                    sep[3],
+                    nov[3],
                   ],
                 },
                 {
@@ -396,7 +413,12 @@ export default {
                     // req.data.list[4].recentlyRate.july,
                     // req.data.list[4].recentlyRate.sep,
                     // req.data.list[4].recentlyRate.nov,
-                    jan[4],mar[4],may[4],july[4],sep[4],nov[4]
+                    jan[4],
+                    mar[4],
+                    may[4],
+                    july[4],
+                    sep[4],
+                    nov[4],
                   ],
                 },
               ],
@@ -440,129 +462,125 @@ export default {
       let income = [];
       let balance = [];
       let myChart = this.$echarts.init(document.getElementById("main1"));
-      this.$http
-        .get("http://localhost:8081/user/findCustomer")
-        .then((req) => {
-          //请求成功时执行该函数内容，result即为服务器返回的json对象
-          if (req.data) {
-            for (var i = 0; i < req.data.list.length; i++) {
-              pay.push(String(req.data.list[i].moneyid.pay));
-              income.push(String(req.data.list[i].moneyid.income));
-              balance.push(String(req.data.list[i].moneyid.balance));
-              username.push(String(req.data.list[i].username));
-             
-            }
-      // 指定图表的配置项和数据
-      const colors = ["#5470C6", "#91CC75", "#EE6666"];
-      let option = {
-        color: colors,
-        title: {
-                text: "User Money",
-              },
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "cross",
-          },
-        },
-        grid: {
-          right: "20%",
-        },
-        toolbox: {
-          feature: {
-            dataView: { show: true, readOnly: false },
-            restore: { show: true },
-            saveAsImage: { show: true },
-          },
-        },
-        legend: {
-          data: ["收入", "支出", "余额"],
-        },
-        xAxis: [
-          {
-            type: "category",
-            axisTick: {
-              alignWithLabel: true,
+      this.$http.get("http://localhost:8081/user/findCustomer").then((req) => {
+        //请求成功时执行该函数内容，result即为服务器返回的json对象
+        if (req.data) {
+          for (var i = 0; i < req.data.list.length; i++) {
+            pay.push(String(req.data.list[i].moneyid.pay));
+            income.push(String(req.data.list[i].moneyid.income));
+            balance.push(String(req.data.list[i].moneyid.balance));
+            username.push(String(req.data.list[i].username));
+          }
+          // 指定图表的配置项和数据
+          const colors = ["#5470C6", "#91CC75", "#EE6666"];
+          let option = {
+            color: colors,
+            title: {
+              text: "User Money",
             },
-            // prettier-ignore
-            data: username,
-          },
-        ],
-        yAxis: [
-          {
-            type: "value",
-            name: "收入",
-            position: "right",
-            alignTicks: true,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: colors[0],
+            tooltip: {
+              trigger: "axis",
+              axisPointer: {
+                type: "cross",
               },
             },
-            axisLabel: {
-              formatter: "{value} 元",
+            grid: {
+              right: "20%",
             },
-          },
-          {
-            type: "value",
-            name: "支出",
-            position: "right",
-            alignTicks: true,
-            offset: 80,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: colors[1],
+            toolbox: {
+              feature: {
+                dataView: { show: true, readOnly: false },
+                restore: { show: true },
+                saveAsImage: { show: true },
               },
             },
-            axisLabel: {
-              formatter: "{value} 元",
+            legend: {
+              data: ["收入", "支出", "余额"],
             },
-          },
-          {
-            type: "value",
-            name: "余额",
-            position: "left",
-            alignTicks: true,
-            axisLine: {
-              show: true,
-              lineStyle: {
-                color: colors[2],
+            xAxis: [
+              {
+                type: "category",
+                axisTick: {
+                  alignWithLabel: true,
+                },
+                // prettier-ignore
+                data: username,
               },
-            },
-            axisLabel: {
-              formatter: "{value} 元",
-            },
-          },
-        ],
-        series: [
-          {
-            name: "收入",
-            type: "bar",
-            data:income
-          },
-          {
-            name: "支出",
-            type: "bar",
-            yAxisIndex: 1,
-            data: pay
-          },
-          {
-            name: "余额",
-            type: "line",
-            yAxisIndex: 2,
-            data: balance
-          },
-        ],
-      };
-      // 使用刚指定的配置项和数据显示图表。
-      myChart.setOption(option);
-    }
-  
-        });
-  }
-},
+            ],
+            yAxis: [
+              {
+                type: "value",
+                name: "收入",
+                position: "right",
+                alignTicks: true,
+                axisLine: {
+                  show: true,
+                  lineStyle: {
+                    color: colors[0],
+                  },
+                },
+                axisLabel: {
+                  formatter: "{value} 元",
+                },
+              },
+              {
+                type: "value",
+                name: "支出",
+                position: "right",
+                alignTicks: true,
+                offset: 80,
+                axisLine: {
+                  show: true,
+                  lineStyle: {
+                    color: colors[1],
+                  },
+                },
+                axisLabel: {
+                  formatter: "{value} 元",
+                },
+              },
+              {
+                type: "value",
+                name: "余额",
+                position: "left",
+                alignTicks: true,
+                axisLine: {
+                  show: true,
+                  lineStyle: {
+                    color: colors[2],
+                  },
+                },
+                axisLabel: {
+                  formatter: "{value} 元",
+                },
+              },
+            ],
+            series: [
+              {
+                name: "收入",
+                type: "bar",
+                data: income,
+              },
+              {
+                name: "支出",
+                type: "bar",
+                yAxisIndex: 1,
+                data: pay,
+              },
+              {
+                name: "余额",
+                type: "line",
+                yAxisIndex: 2,
+                data: balance,
+              },
+            ],
+          };
+          // 使用刚指定的配置项和数据显示图表。
+          myChart.setOption(option);
+        }
+      });
+    },
+  },
   created() {
     this.currenttime = setInterval(this.gettime, 1000);
   },
@@ -575,12 +593,11 @@ export default {
     this.$http.get("/api").then((res) => {
       console.log(res.data);
       // this.weather=res.data.lives
-      this.weather[0].city = res.data.lives[0].city;
-      this.weather[0].province = res.data.lives[0].province;
-      this.weather[0].weather = res.data.lives[0].weather;
-      this.weather[0].temperature = res.data.lives[0].temperature;
-      this.weather[0].winddirection = res.data.lives[0].winddirection;
-      this.weather[0].windpower = res.data.lives[0].windpower;
+      this.weather[0].city = res.data.results[0].location.name;
+      this.weather[0].weather = res.data.results[0].now.text;
+      this.weather[0].temperature = res.data.results[0].now.temperature;
+      this.weather[0].code = res.data.results[0].now.code;
+      this.weather[0].last_update = res.data.results[0].last_update;
     });
   },
 };

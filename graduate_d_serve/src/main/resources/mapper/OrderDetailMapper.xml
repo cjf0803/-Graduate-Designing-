@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.order.mapper.OrderDetailMapper">
+<!--    根据订单表中详情id查询详情-->
+    <select id="findDetailById" resultType="com.neu.order.entity.Detail" >
+        <![CDATA[
+        select b.*
+        from (select p.*, rownum r from g_d_o_detail p where p.id=#{id}) b
+        where r > (#{index} - 1) * #{size}
+          and r <= #{index} * #{size}
+        ]]>
+    </select>
+<!--    根据用户名查询详情(去重)-->
+    <select id="findDetailByUsername" resultType="com.neu.order.entity.Detail" >
+        <![CDATA[
+        select id,pname,pimg,price,averagerate,username from(
+            select a.*,row_number() over(order by averagerate asc) r,row_number() over(partition by a.pname order by a.averagerate asc) su from g_d_o_detail a where a.username =#{username})
+            where  r >= (#{index} - 1) * #{size}
+          and r < #{index} * #{size} and su=1 and username =#{username}
+        ]]>
+    </select>
+    <!--     根据用户名查询详情表中记录数-->
+    <select id="countDetailByUsername" resultType="int">
+        select count(1)
+        from (select a.*,row_number() over(partition by a.pname order by a.price desc) su from g_d_o_detail a where a.username =#{username} )
+        where su=1 and username =#{username}
+    </select>
+<!--    详情表中记录数-->
+    <select id="countDetailById" resultType="int">
+        select count(1)
+        from g_d_o_detail  where id=#{id}
+    </select>
+<!--    删除订单的同时删除订单详情中的数据-->
+    <delete id="deleteDetail" parameterType="com.neu.order.entity.Detail">
+        delete from g_d_o_detail where id=#{id}
+    </delete>
+
+
+</mapper>

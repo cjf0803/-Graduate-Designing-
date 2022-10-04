@@ -209,24 +209,47 @@ export default {
       })
         .then(() => {
           this.balance = this.$store.getters["uInfo/getUserMoneyInfo"].balance;
+          
           if(this.balance > this.totalsum){
-            this.$http
-            .get(
-              "http://localhost:8081/cart/addOrder/" + this.totalsum + "/" + this.payWay,
-              { xhrFields: { withCredentials: true } },
-              { crossDomain: true }
-            )
-            .then((res) => {
-              if (res != null) {
-                this.dialogFormVisible = false;
-                this.$notify({
-                  title: "成功",
-                  message: "下单成功，请支付",
-                  type: "success",
-                });
-                window.location.href = '/pay' + this.totalsum;
-              }
+            let detail_id = Math.round(Math.random() * 1000);
+            let detail = JSON.stringify(this.tableData);
+            var that = this;
+            this.$jquery.ajax({
+              url: "http://localhost:8081/cart/addOrder",
+              data:
+                "detail="+detail+"&totalSum="+this.totalsum+"&payWay="+this.payWay+"&detail_id="+detail_id+"&username="+this.username
+                ,
+              type: "post",
+              dataType: "json",
+              success: function (res) {
+                if (res) {
+                  that.$notify({
+                    title: "成功",
+                    message: "请支付",
+                    type: "success",
+                  });
+                    window.location.href = "/pay" + that.totalsum.toFixed(2);
+                 
+                }
+              },
             });
+            // this.$http
+            // .get(
+            //   "http://localhost:8081/cart/addOrder/" + this.totalsum + "/" + this.payWay,
+            //   { xhrFields: { withCredentials: true } },
+            //   { crossDomain: true }
+            // )
+            // .then((res) => {
+            //   if (res != null) {
+            //     this.dialogFormVisible = false;
+            //     this.$notify({
+            //       title: "成功",
+            //       message: "下单成功，请支付",
+            //       type: "success",
+            //     });
+            //     window.location.href = '/pay' + this.totalsum;
+            //   }
+            // });
           }else {
             this.$notify.error({
               title: "错误",

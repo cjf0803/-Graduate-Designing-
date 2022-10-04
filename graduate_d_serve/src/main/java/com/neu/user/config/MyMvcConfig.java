@@ -13,6 +13,6 @@ public class MyMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        registry.addInterceptor(new LoginIntercepter()).addPathPatterns("/**").excludePathPatterns("/user/login/**","/user/loginOut","/upload/user","/upload/product","/user/regist/**","/pay/alipay");
+        registry.addInterceptor(new LoginIntercepter()).addPathPatterns("/**").excludePathPatterns("/user/login/**","/user/loginOut","/upload/user","/upload/product","/user/regist/**","/pay/alipay","/cart/addOrder");
     }
 }

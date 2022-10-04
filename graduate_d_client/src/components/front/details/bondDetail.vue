@@ -113,9 +113,17 @@
         .then(({ value }) => {
           if (value == null) {
             value = 1;
+          }else if (value < 0) {
+            this.$notify.error({
+              title: "购入失败",
+              message: "购入数量不能小于0!",
+            });
+          } else {
+            this.$router.push({
+            path: "/order",
+            query: { id: this.$route.query.id, pnum: value },
+          });
           }
-          this.$router.push({path:'/order',query:{id:this.$route.query.id,pnum:value}})
-
         })
         .catch(() => {
           this.$message({
@@ -134,24 +142,30 @@
         .then(({ value }) => {
           if (value == null) {
             value = 1;
-          }
-          this.$http
-            .get(
-              "http://localhost:8081/product/addCart/" +
-                this.tableData[0].id +
-                "/" +
-                value
-            )
-            .then((res) => {
-                console.log(res.data)
-              if (res.data != null) {
-                this.$notify({
-                  title: "添加成功",
-                  message: "可继续选购我们的理财产品~",
-                  type: "success",
-                });
-              }
+          } else if (value < 0) {
+            this.$notify.error({
+              title: "购入失败",
+              message: "购入数量不能小于0!",
             });
+          } else {
+            this.$http
+              .get(
+                "http://localhost:8081/product/addCart/" +
+                  this.tableData[0].id +
+                  "/" +
+                  value
+              )
+              .then((res) => {
+                console.log(res.data);
+                if (res.data != null) {
+                  this.$notify({
+                    title: "添加成功",
+                    message: "可继续选购我们的理财产品~",
+                    type: "success",
+                  });
+                }
+              });
+          }
         })
         .catch(() => {
           this.$message({

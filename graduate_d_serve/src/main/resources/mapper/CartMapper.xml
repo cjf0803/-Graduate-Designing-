@@ -74,10 +74,24 @@
         select sum(sum) from g_d_u_cart where username=#{username}
     </select>
 <!--    添加到订单表中-->
+
     <insert id="addOrder" parameterType="map" >
-        insert into g_d_order(oid,username,totalsum,exincome,time,payway,state,executetime,author)
-        values(seq_g_d_order.nextval,#{username},#{totalsum},#{exincome},sysdate,#{payway},'2',null,null)
+        insert into g_d_order(oid,username,totalsum,exincome,time,payway,state,executetime,author,detail_id)
+        values(seq_g_d_order.nextval,#{username},#{totalsum},#{exincome},
+               #{time},
+               #{payway},'2',null,null,#{detail_id})
+
     </insert>
+<!--    添加到订单详情表中-->
+    <insert id="insertAll">
+        insert into g_d_o_detail(id,pname,pimg,price,averagerate,username)
+        <foreach collection="detail" item="su" index="index" separator="union all" >
+            select #{ids},#{su.pname},#{su.pimg},#{su.price},#{su.averagerate},#{username} from dual
+        </foreach>
+
+    </insert>
+
+
     <!--    添加已取消订单到订单表中-->
     <insert id="addCancelOrder" parameterType="map" >
         insert into g_d_order(oid,username,totalsum,exincome,time,payway,state,executetime,author)
@@ -85,7 +99,7 @@
     </insert>
     <!--根据用户名计算预购中心平均收益率-->
     <select id="avg" resultType="double">
-        select avg(averagerate) from g_d_u_cart where username=#{username}
+        select avg(averagerate) from g_d_o_detail where id=#{id}
     </select>
     <!--  模糊查询-->
     <sql id="sql1">

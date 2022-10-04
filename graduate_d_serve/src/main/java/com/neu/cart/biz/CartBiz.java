@@ -1,9 +1,12 @@
 package com.neu.cart.biz;
 
+import com.alibaba.fastjson.JSONArray;
 import com.neu.cart.entity.Cart;
 import com.neu.order.entity.Order;
 import com.neu.product.entity.Product;
+import org.apache.ibatis.annotations.Param;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,10 +28,11 @@ public interface CartBiz {
     public boolean updateCart(Cart cart);
     public Cart findByPname(String pname,String username);
     public double totalSum(String username);
-    public double avg(String username);
+    public double avg(String id);
     public List<Cart> findCartMo(int index, int size, String username);
     public int countMo(String username);
-    public boolean addOrder(String username,double totalsum,double exincome,String payway);
+    public boolean addOrder(String username, double totalsum, double exincome, Date time,String payway, String detail_id);
     public boolean addCancelOrder(String username,double totalsum,double exincome,String payway);
+    public boolean insertAll(String ids, JSONArray detail, String username);
 
 }

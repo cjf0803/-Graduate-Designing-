@@ -23,4 +23,5 @@ public interface OrderBiz {
     public void updateSuccess(String oid);
     public List<Order> findOrderByUsername(int index,int size,String username);
     public int countOrderByUsername(String username);
+    public List<Order> findBySuccess(String username);
 }

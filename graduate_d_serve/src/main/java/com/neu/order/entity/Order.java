@@ -29,8 +29,11 @@ public class Order {
     private Date  executetime;
     @ApiModelProperty("订单执行者")
     private String author;
+    @ApiModelProperty("订单详情id")
+    private String detail_id;
 
-    public Order(String oid, String username, double totalsum, double exincome, Date time, Pay payWay, State state, Date executetime, String author) {
+
+    public Order(String oid, String username, double totalsum, double exincome, Date time, Pay payWay, State state, Date executetime, String author, String detail_id) {
         this.oid = oid;
         this.username = username;
         this.totalsum = totalsum;
@@ -40,6 +43,7 @@ public class Order {
         this.state = state;
         this.executetime = executetime;
         this.author = author;
+        this.detail_id = detail_id;
     }
 
     public Order(String oid, String author) {
@@ -120,5 +124,13 @@ public class Order {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getDetail_id() {
+        return detail_id;
+    }
+
+    public void setDetail_id(String detail_id) {
+        this.detail_id = detail_id;
     }
 }

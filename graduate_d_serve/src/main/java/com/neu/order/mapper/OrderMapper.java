@@ -26,6 +26,7 @@ public interface OrderMapper {
     public void updateSuccess(String oid);
     public List<Order> findOrderByUsername(Map<String, Object> map);
     public int countOrderByUsername(String username);
+    public List<Order> findBySuccess(String username);
 
 
 

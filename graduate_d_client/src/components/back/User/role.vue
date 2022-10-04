@@ -163,6 +163,7 @@ export default {
       formLabelWidth: "120px",
       total: 0,
       pageSize: 1,
+      currentPage:1,
       dialogFormEVisible: false,
       dialogFormVisible:false,
       rules: {

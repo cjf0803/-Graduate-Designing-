@@ -111,5 +111,10 @@ public class OrderBizImpl implements OrderBiz {
         return orderMapper.countOrderByUsername(username);
     }
 
+    @Override
+    public List<Order> findBySuccess(String username) {
+        return orderMapper.findBySuccess(username);
+    }
+
 
 }

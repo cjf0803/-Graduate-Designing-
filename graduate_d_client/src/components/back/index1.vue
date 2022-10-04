@@ -34,8 +34,14 @@
         >
       </div>
       <!-- 编辑弹窗(修改个人信息)  rules有问题！(已解决)-->
-      <el-dialog title="修改个人信息" :visible.sync="dialogFormVisible">
+      <el-dialog  :visible.sync="dialogFormVisible">
         <el-form :model="userData" :rules="rules" ref="userData">
+          <el-form-item prop="img">
+          <img
+            :src="require('@/assets/img/user/' + userData.img)"
+            class="image"
+          />
+        </el-form-item>
           <el-form-item
             label="用户名"
             prop="username"
@@ -46,7 +52,7 @@
               @input="change($event)"
               autocomplete="off"
               clearable
-              readonly="true"
+              readonly
             ></el-input>
           </el-form-item>
           <el-form-item
@@ -134,14 +140,14 @@
       <el-aside width="200px">
         <!--侧边栏菜单区域-->
         <el-menu
-          background-color="#454b5d"
+          background-color="black"
           text-color="#fff"
           active-text-color="#409eff"
           :router="true"
           ><!--二级菜单颜色,unique-opened菜单只打开一个.:router="true":开启菜单路由模式-->
           <!--一级菜单-->
 
-          <el-menu-item index="home">
+          <el-menu-item index="home" style="background-color:#454b5d" >
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
@@ -160,7 +166,7 @@
           ><!--二级菜单颜色,unique-opened菜单只打开一个.:router="true":开启菜单路由模式-->
           <!--一级菜单-->
 
-          <el-submenu index="1">
+          <el-submenu index="1" style="background-color:#454b5d" >
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
@@ -170,7 +176,7 @@
             </template>
             <!--二级菜单-->
             <!--index对应要跳转到的视图-->
-            <el-menu-item index="index">
+            <el-menu-item index="index" style="background-color:#454b5d">
               <template slot="title">
                 <!--图标-->
                 <div class="space">
@@ -190,9 +196,10 @@
             >
               <el-menu-item
                 index="role"
+                style="background-color:#454b5d"
                 :disabled="currentRole >= 4 ? false : true"
               >
-                <template slot="title">
+                <template slot="title" >
                   <!--图标-->
                   <div class="space">
                     <i class="el-icon-guide"></i
@@ -214,7 +221,7 @@
                 index="add"
                 :disabled="currentRole >= 4 ? false : true"
               >
-                <template slot="title">
+                <template slot="title" >
                   <!--图标-->
                   <div class="space">
                     <i class="el-icon-circle-plus-outline"></i
@@ -225,7 +232,7 @@
                 </template>
               </el-menu-item>
             </el-tooltip>
-            <el-menu-item index="findUserMo">
+            <el-menu-item index="findUserMo" style="background-color:#454b5d">
               <template slot="title">
                 <!--图标-->
                 <div class="space">
@@ -266,7 +273,7 @@
                 </div>
               </template>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
                 <router-link
@@ -280,7 +287,7 @@
                 </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
                 <router-link
@@ -359,7 +366,7 @@
           active-text-color="#409eff"
         >
           <!--一级菜单-->
-          <el-submenu index="1">
+          <el-submenu index="2">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
@@ -388,7 +395,7 @@
           :router="true"
         >
           <!--一级菜单-->
-          <el-submenu index="1">
+          <el-submenu index="3">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
@@ -475,7 +482,7 @@
           active-text-color="#409eff"
         >
           <!--一级菜单-->
-          <el-submenu >
+          <el-submenu index="4">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
@@ -484,7 +491,7 @@
               <span>数据统计</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item >
+            <el-menu-item index="echarts">
               <template slot="title">
                 <!--图标-->
                 <router-link to='/echarts'>
@@ -674,12 +681,12 @@ export default {
   },
   watch: {
     // 监听路由是否变化
-    $route(to, from) {
-      if (to.query.ptype != from.query.ptype) {
-        this.ptype = to.query.ptype; // 把最新id赋值给定义在data中的id
-        this.init(); // 重新调用加载数据方法
-      }
-    },
+    // $route(to, from) {
+    //   if (to.query.ptype != from.query.ptype) {
+    //     this.ptype = to.query.ptype; // 把最新id赋值给定义在data中的id
+    //     this.init(); // 重新调用加载数据方法
+    //   }
+    // },
   },
   methods: {
     handleAvatarSuccess(res, file) {
@@ -811,11 +818,8 @@ span {
   margin-left: 20px;
   color: white;
 }
-.space i:hover {
-  color: aqua;
-}
-.space i:visited {
-  color: aqua;
+.space :hover {
+  color: inherit;
 }
 .head-logo {
   display: flex;
@@ -880,6 +884,14 @@ a {
 
 .router-link-active {
   text-decoration: none;
-  color: aqua
+  color: aqua;
 }
+.image {
+  border-radius: 50%;
+  margin-left: 86px;
+  height: 150px;
+  width: 150px;
+}
+
+
 </style>

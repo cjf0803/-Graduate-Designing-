@@ -7,6 +7,8 @@
       id="employeeSex"
       style="width: 100%; height: 500px; margin-bottom: 50px"
     ></div>
+    <el-divider></el-divider>
+    <div id="drawChart" style="width: 100%; height: 600px"></div>
   </div>
 </template>
 
@@ -19,10 +21,175 @@ export default {
   mounted() {
     this.$nextTick(() => {
       this.drawChart1();
+      this.drawChart();
       this.initEmployeeSex();
     });
   },
   methods: {
+    drawChart() {
+      let rname = [];
+      let jan = [];
+      let mar = [];
+      let may = [];
+      let july = [];
+      let sep = [];
+      let nov = [];
+      this.$http
+        .get("http://localhost:8081/recentlyRate/findAll/4")
+        .then((req) => {
+          //请求成功时执行该函数内容，result即为服务器返回的json对象
+          if (req.data) {
+            //  let data= req.data.list
+            for (var i = 0; i < req.data.list.length; i++) {
+              //recentlyRate.push(String(req.data.list[i].recentlyRate));
+              rname.push(String(req.data.list[i].rname));
+              jan.push(String(req.data.list[i].jan));
+              mar.push(String(req.data.list[i].mar));
+              may.push(String(req.data.list[i].may));
+              july.push(String(req.data.list[i].july));
+              sep.push(String(req.data.list[i].sep));
+              nov.push(String(req.data.list[i].nov));
+              // this.values.push(req.data[i].value);
+            }
+            var myChart = this.$echarts.init(
+              document.getElementById("drawChart")
+            );
+            let option = {
+              title: {
+                text: "产品月收益率",
+                left: "1%",
+              },
+              tooltip: {
+                trigger: "axis",
+              },
+              grid: {
+                left: "5%",
+                right: "15%",
+                bottom: "10%",
+              },
+              xAxis: {
+                data: ["jan", "mar", "may", "july", "sep"],
+              },
+              yAxis: {},
+              toolbox: {
+                right: 10,
+                feature: {
+                  dataZoom: {
+                    yAxisIndex: "none",
+                  },
+                  restore: {},
+                  saveAsImage: {},
+                },
+              },
+              dataZoom: [
+                {
+                  startValue: "jan",
+                },
+                {
+                  type: "inside",
+                },
+              ],
+              visualMap: {
+                top: 50,
+                right: 10,
+                pieces: [
+                  {
+                    gt: 0,
+                    lte: 5,
+                    color: "#93CE07",
+                  },
+                  {
+                    gt: 5,
+                    lte: 10,
+                    color: "#FBDB0F",
+                  },
+                  {
+                    gt: 10,
+                    lte: 15,
+                    color: "#FC7D02",
+                  },
+                  {
+                    gt: 15,
+                    lte: 30,
+                    color: "#FD0100",
+                  },
+                  {
+                    gt: 30,
+                    lte: 45,
+                    color: "#AA069F",
+                  },
+                  {
+                    gt: 55,
+                    color: "#AC3B2A",
+                  },
+                ],
+                outOfRange: {
+                  color: "#999",
+                },
+              },
+              series: [
+                {
+                  name: rname[0],
+                  type: "line",
+                  data: jan,
+                  markLine: {
+                    silent: true,
+                    lineStyle: {
+                      color: "#93CE07",
+                    },
+                  },
+                },
+                {
+                  name: rname[1],
+                  type: "line",
+                  data: mar,
+                  markLine: {
+                    silent: true,
+                    lineStyle: {
+                      color: "#333",
+                    },
+                  },
+                },
+                {
+                  name: rname[2],
+                  type: "line",
+                  data: may,
+                  markLine: {
+                    silent: true,
+                    lineStyle: {
+                      color: "#333",
+                    },
+                  },
+                },
+                {
+                  name: rname[3],
+                  type: "line",
+                  data: july,
+                  markLine: {
+                    silent: true,
+                    lineStyle: {
+                      color: "#333",
+                    },
+                  },
+                },
+                {
+                  name: rname[4],
+                  type: "line",
+                  data: sep,
+                  markLine: {
+                    silent: true,
+                    lineStyle: {
+                      color: "#333",
+                    },
+                  },
+                },
+              ],
+            };
+
+            myChart.setOption(option);
+          }
+        });
+    },
     initEmployeeSex() {
       //  let recentlyRate=[];
       let pname = [];

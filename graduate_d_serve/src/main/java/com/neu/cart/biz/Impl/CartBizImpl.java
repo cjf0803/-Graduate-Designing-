@@ -1,5 +1,6 @@
 package com.neu.cart.biz.Impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.neu.cart.biz.CartBiz;
 import com.neu.cart.entity.Cart;
 import com.neu.cart.mapper.CartMapper;
@@ -8,6 +9,7 @@ import com.neu.order.entity.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,8 +93,8 @@ public class CartBizImpl implements CartBiz {
     }
 
     @Override
-    public double avg(String username) {
-        return cartMapper.avg(username);
+    public double avg(String id) {
+        return cartMapper.avg(id);
     }
 
     @Override
@@ -114,12 +116,14 @@ public class CartBizImpl implements CartBiz {
     }
 
     @Override
-    public boolean addOrder(String username, double totalsum, double exincome, String payway) {
+    public boolean addOrder(String username, double totalsum, double exincome, Date time, String payway, String detail_id) {
         Map<String,Object> map =new HashMap<String,Object>();
         map.put("username",username);
         map.put("totalsum",totalsum);
         map.put("exincome",exincome);
+        map.put("time",time);
         map.put("payway",payway);
+        map.put("detail_id",detail_id);
         return cartMapper.addOrder(map);
     }
 
@@ -131,5 +135,11 @@ public class CartBizImpl implements CartBiz {
         map.put("exincome",exincome);
         map.put("payway",payway);
         return cartMapper.addCancelOrder(map);
+    }
+
+    @Override
+    public boolean insertAll(String ids, JSONArray detail, String username) {
+
+        return cartMapper.insertAll(ids,detail,username);
     }
 }

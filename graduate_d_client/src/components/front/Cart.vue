@@ -77,15 +77,26 @@
     <el-button
       @click="delAll"
       style="float: left; margin-left: 185px; margin-top: 15px"
+      type="warning"
+      plain
       >批量删除</el-button
     >
     <el-button
       @click="clear"
       style="float: left; margin-left: 13px; margin-top: 15px"
+      type="info"
+      plain
       >清空选择</el-button
     >
+    <el-button
+      @click="goBuy"
+      style="float: left; margin-left: 13px; margin-top: 15px"
+      type="success"
+      plain
+      >继续购物</el-button
+    >
 
-    <div class="fenye" style="margin-top: 20px; margin-right: 670px">
+    <div class="fenye" style="margin-top: 20px; margin-right: 245px">
       <!-- 分页 -->
 
       <el-pagination
@@ -108,9 +119,9 @@
           font-size: x-large;
           position: relative;
           bottom: 109px;
-          left: 642px;
+          left: 435px;
         "
-        >预购总价：￥{{ totalSum | numFilter }}元</span
+        >预购总价：￥{{ totalSum > 0 ? totalSum.toFixed(2) : "0.00" }}元</span
       >
     </div>
     <el-button
@@ -168,17 +179,19 @@ export default {
       total: 1,
       pageSize: 1,
       currentPage: 1,
-      totalSum: 0.0,
+      totalSum: 0.00,
       payWay: "",
       balance: 0.0,
       selNum: 0,
       sum: 0.0,
       flag: true,
+      username:"",
       i: 0,
       getRowKeys(row) {
         return row.cid;
       },
       multipleSelection: [],
+      selectionIds: [],
       tableData: [
         {
           cid: "",
@@ -189,7 +202,7 @@ export default {
           averagerate: "",
           pnum: "",
           sum: "",
-          selected: false,
+          selected: 1,
         },
       ],
     };
@@ -202,6 +215,7 @@ export default {
     },
   },
   mounted() {
+    this.username = this.$store.getters["uInfo/getUserInfo"].USERNAME;
     this.$http
       .get("http://localhost:8081/cart/findCartByUsername/1")
       .then((res) => {
@@ -211,6 +225,10 @@ export default {
           this.pageSize = res.data.list.length;
         }
       });
+    // this.tableData.forEach((item)=>{
+    //   //让tableData中每一个item都增加一个属性select并且为true
+    //   this.$set(item,'select',true);
+    // })
   },
 
   methods: {
@@ -223,27 +241,51 @@ export default {
         .then(() => {
           this.balance = this.$store.getters["uInfo/getUserMoneyInfo"].balance;
           if (this.balance > this.totalSum) {
-            this.$http
-              .get(
-                "http://localhost:8081/cart/addOrder/" +
-                  this.totalSum +
-                  "/" +
-                  this.payWay,
-                { xhrFields: { withCredentials: true } },
-                { crossDomain: true }
-              )
-              .then((res) => {
-                if (res != null) {
-                  this.dialogFormVisible = false;
-                  this.$notify({
+            let detail_id = Math.round(Math.random() * 1000);
+            let detail = JSON.stringify(this.multipleSelection);
+            var that = this;
+            this.$jquery.ajax({
+              url: "http://localhost:8081/cart/addOrder",
+              data:
+                "detail="+detail+"&totalSum="+this.totalSum+"&payWay="+this.payWay+"&detail_id="+detail_id+"&username="+this.username
+                ,
+              type: "post",
+              dataType: "json",
+              success: function (res) {
+                if (res) {
+                  that.dialogFormVisible = false;
+                  that.$notify({
                     title: "成功",
                     message: "请支付",
                     type: "success",
                   });
-
-                  window.location.href = "/pay" + this.totalSum;
+                  window.location.href = "/pay" + that.totalSum.toFixed(2);
                 }
-              });
+              },
+            });
+            // this.$http
+            //   .get(
+            //     "http://localhost:8081/cart/addOrder/" +
+            //       this.totalSum +
+            //       "/" +
+            //       this.payWay+
+            //       "/"+detail_id
+            //      ,
+            //     { xhrFields: { withCredentials: true } },
+            //     { crossDomain: true }
+            //   )
+            //   .then((res) => {
+            //     if (res != null) {
+            //       this.dialogFormVisible = false;
+            //       this.$notify({
+            //         title: "成功",
+            //         message: "请支付",
+            //         type: "success",
+            //       });
+
+            //       window.location.href = "/pay" + this.totalSum;
+            //     }
+            //   });
           } else {
             this.$notify.error({
               title: "错误",
@@ -266,9 +308,10 @@ export default {
         type: "warning",
       })
         .then(() => {
+          console.log(this.selectionIds);
           this.$http
             .get(
-              "http://localhost:8081/cart/delCartAll/" + this.multipleSelection,
+              "http://localhost:8081/cart/delCartAll/" + this.selectionIds,
               { xhrFields: { withCredentials: true } },
               { crossDomain: true }
             )
@@ -320,72 +363,22 @@ export default {
     },
     handleSelectionChange(val) {
       this.selNum = val.length;
-     
-      for (var index1 in val) {
-        this.multipleSelection.push(val[index1].cid);
-      }
-      for (var index in val) {
-        console.log(index);
-        this.totalSum += val[this.selNum - 1].price*val[this.selNum - 1].pnum;
-        
-        break;
+      this.multipleSelection = val;
+      this.selectionIds = this.multipleSelection.map(function (item) {
+        return item["cid"];
+      });
+      console.log("选中的商品id数组：" + this.selectionIds);
+
+      this.totalSum = 0.0; //每次调用清零 重新计算！！！
+      for (var index of val) {
+        this.totalSum += index.price * index.pnum;
       }
 
-    
-      console.log(this.selNum1);
-      // for (var i in this.tableData) {
-      //   if (this.multipleSelection.indexOf(this.tableData[i].cid) != -1) {
-      //     this.tableData[i].selected = 1;
-      //   } else {
-      //     this.tableData[i].selected = 0;
-      //   }
-      // }
-      this.i += 1;
-      console.log(this.i);
       console.log(this.multipleSelection);
     },
-    // handlerSelect(val,row) {
 
-    //   if(val.length==1){
-    //     val.forEach((item) => {
-    //       console.log("已被选")
-    //     this.multipleSelection.push(item.cid); //把所有的id放进multipleSelection
-    //     this.totalSum +=row.pnum*row.price;
-    //     this.sum=row.pnum*row.price
-    //   });
-    //   }else{
-    //     console.log("未被选")
-    //     this.totalSum -=this.sum;
-    //   }
-    //   console.log(this.sum);
-
-    // },
-
-    // handleSelectionChange(val) {
-    //   //this.multipleSelection = val // 返回的是选中的列的数组集合
-    //   if(val.length==1){
-    //     val.forEach((item) => {
-    //       console.log(item)
-    //     this.multipleSelection.push(item.cid); //把所有的id放进multipleSelection
-    //     })
-    //   }else if (val.length > 1) {
-    //     console.log(val)
-    //     let flag=false;
-    //     val.forEach((item) => {
-    //       if(flag){
-    //       this.multipleSelection.push(item.cid); //把所有的id放进multipleSelection
-    //       }
-    //       flag=true;
-    //     });
-    //   } else {
-    //     console.log("取消勾选");
-    //     console.log(val)
-
-    //   }
-
-    //   console.log(this.multipleSelection);
-    // },
     handleChange(row) {
+      this.totalSum = 0.0;
       this.$http
         .get(
           "http://localhost:8081/cart/updateNumById/" + row.cid + "/" + row.pnum
@@ -393,6 +386,10 @@ export default {
         .then(() => {
           // this.reload();
         });
+      let val = this.multipleSelection;
+      for (var index of val) {
+        this.totalSum += index.price * index.pnum;
+      }
     },
     changePage: function (index) {
       this.$http
@@ -400,6 +397,9 @@ export default {
         .then((res) => {
           this.tableData = res.data.list;
         });
+    },
+    goBuy: function () {
+      this.$router.go(-1);
     },
     delProduct: function (row) {
       console.log(row);

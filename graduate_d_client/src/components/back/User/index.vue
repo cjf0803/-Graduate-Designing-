@@ -2,7 +2,7 @@
   <div id="box">
     <!-- 面包屑 -->
     <el-breadcrumb>
-      <el-breadcrumb-item :to="{ path: 'home' }">首页</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: 'home' }" >首页</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/index' }">用户列表</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/findUserMo' }"
         >模糊查询</el-breadcrumb-item

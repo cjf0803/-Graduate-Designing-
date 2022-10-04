@@ -1,7 +1,7 @@
 <template>
   <div>
     <div style="margin-bottom: 20px">
-      <el-page-header @back="goBack" content="理财产品"> </el-page-header>
+      <el-page-header @back="goBack" :content="state_name"> </el-page-header>
     </div>
     <div style="margin: 0 70px 18px 0">
     <el-progress type="circle" :percentage="0"></el-progress>
@@ -174,6 +174,7 @@ export default {
       pageSize: 1,
       keywords: "",
       state: "",
+      state_name:"",
       multipleSelection: [],
       tableData: [
         {
@@ -214,9 +215,42 @@ export default {
         this.index = req.data.index;
         this.state = req.data.state;
         this.pageSize = req.data.list.length;
+        this.state_name=req.data.list[0].state.sname
       });
   },
   methods: {
+    success: function (row) {
+      console.log(row);
+      this.$confirm("是否结算?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$http
+            .get(
+              "http://localhost:8081/order/updateTwo/" + row.oid+"/"+row.username,
+              { xhrFields: { withCredentials: true } },
+              { crossDomain: true }
+            )
+            .then((res) => {
+              if (res != null) {
+                this.$message({
+                  showClose: true,
+                  message: "执行成功,可前往用户管理查看用户资产！",
+                  type: "success",
+                });
+                this.reload();
+              }
+            });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消执行!",
+          });
+        });
+    },
     goBack() {
       this.$router.push({ name: "orderIndex" });
     },

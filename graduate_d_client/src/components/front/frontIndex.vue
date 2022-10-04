@@ -17,9 +17,9 @@
           </h1>
           <nav class="nav">
             <!-- :to="{ path: '/gold', query: { ptype: '6' } }" -->
-
+        
             <el-link class="menu-item">
-              <router-link class="amireux-link" to="/frontHome"
+              <router-link class="amireux-link"  to="/frontHome"
                 >主页</router-link
               >
             </el-link>
@@ -71,7 +71,7 @@
               </router-link> -->
               <el-dropdown @command="handleCommand1">
                 <span
-                  class="el-dropdown-link"
+                  class="el-dropdown-link "
                   style="color: #999999; font-size: 18px; font-weight: bold"
                 >
                   个人中心<i class="el-icon-arrow-down el-icon--right"></i>
@@ -87,7 +87,7 @@
               <el-dropdown @command="handleCommand">
                 <span
                   class="el-dropdown-link"
-                  style="color: lightblue; font-size: 18px"
+                  style=" color:#999999; font-size: 18px;font-weight: bold;"
                 >
                   登录<i class="el-icon-arrow-down el-icon--right"></i>
                 </span>
@@ -98,15 +98,25 @@
                 </el-dropdown-menu>
               </el-dropdown>
             </el-link>
+
+            <!-- <p>用户名：{{userData.username}}</p> -->
             <el-image
               :src="require('@/assets/img/user/' + userData.img)"
               class="headimg"
-            ></el-image>
+            >
+            </el-image>
+
             <el-button
               type="danger"
               @click="open"
-              style="position: absolute; right: 18px; top: 11px"
+              style="position: absolute; right: 127px; top: 11px"
               >开通账户</el-button
+            >
+            <el-button
+              type="success"
+              @click="update"
+              style="position: absolute; right: 18px; top: 11px"
+              >更新账户</el-button
             >
           </nav>
         </el-container>
@@ -191,7 +201,7 @@
             @input="change($event)"
             autocomplete="off"
             clearable
-            readonly="true"
+            readonly
           ></el-input>
         </el-form-item>
         <el-form-item
@@ -464,6 +474,33 @@ export default {
           });
       });
     },
+    update: function () {
+      this.$confirm("确定更新账户么?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      }).then(() => {
+        this.$http
+          .get(
+            "http://localhost:8081/user/findByMoneyid/" + this.moneyid,
+            { xhrFields: { withCredentials: true } },
+            { crossDomain: true }
+          )
+          .then((res) => {
+            console.log(res);
+            // //数据存入userMoneyInfo中
+            this.$store.commit("uInfo/setMoneyInfo", res.data);
+            localStorage.setItem("money", JSON.stringify(res.data));
+            if (res.data != null) {
+              this.$message({
+                type: "success",
+                message: "更新账户成功!",
+              });
+            }
+            this.reload();
+          });
+      });
+    },
     handleCommand(command) {
       if (command == "a") {
         this.$router.push({ name: "frontLogin" });
@@ -486,6 +523,8 @@ export default {
                 console.log(res);
                 localStorage.removeItem("loginData");
                 this.$store.commit("setUserInfo", {});
+                localStorage.removeItem("money");
+                this.$store.commit("setMoneyInfo", {});
                 if (res.data == true) {
                   this.$message({
                     type: "success",
@@ -550,11 +589,14 @@ export default {
   text-decoration: none;
   color: inherit;
 }
-
+.amireux-link:hover{
+  color: lightblue !important;
+  text-decoration: none;
+}
 .topbar .nav {
   margin: auto;
   text-align: right;
-  margin-right: 200px;
+  margin-right: 310px;
   font-family: sans-serif;
   margin-bottom: 15px;
 }
@@ -629,6 +671,9 @@ li.el-upload-list__item.is-success {
   position: relative;
   top: 16px;
   right: -90px;
+}
+.router-link-active{
+  color:lightblue;
 }
 </style>
   

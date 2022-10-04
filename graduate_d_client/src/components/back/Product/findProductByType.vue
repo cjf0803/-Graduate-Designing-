@@ -1,7 +1,7 @@
 <template>
   <div :key="appkey">
     <div style="margin-bottom: 20px">
-      <el-page-header @back="goBack" content="理财产品"> </el-page-header>
+      <el-page-header @back="goBack" :content="pname"></el-page-header>
     </div>
     <el-steps :active="3" align-center>
       <el-step title="步骤1" description="产品类型介绍"></el-step>
@@ -14,7 +14,7 @@
     </el-steps>
     <el-divider></el-divider>
     <el-carousel :interval="4000" type="card" height="200px">
-      <el-carousel-item v-for="item in imgs" :key="item">
+      <el-carousel-item v-for="item in imgs" :key="item.url">
         <img :src="item.url" alt="" />
       </el-carousel-item>
     </el-carousel>
@@ -131,6 +131,7 @@ export default {
       currentPage: 1,
       formLabelWidth: "120px",
       ptype: "",
+      pname:"",
       imgs: [
         {
           url: require("@/assets/images/appearance/shares1.png"),
@@ -206,6 +207,7 @@ export default {
         this.index = req.data.index;
         this.ptype = req.data.ptype;
         this.pageSize = req.data.list.length;
+        this.pname=req.data.list[0].ptype.tname
       });
   },
 

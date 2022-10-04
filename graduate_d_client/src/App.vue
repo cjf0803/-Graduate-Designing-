@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <router-view v-if="showRouterView"></router-view>
-    <el-backtop :bottom="100" visibility-height="30">
+    <el-backtop :bottom="100" >
       <div
         style="
            {

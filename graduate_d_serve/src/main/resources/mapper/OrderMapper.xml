@@ -12,6 +12,7 @@
         <result column="time" property="time" />
         <result column="executetime" property="executetime" />
         <result column="author" property="author" />
+        <result column="detail_id" property="detail_id" />
         <association property="payWay" javaType="com.neu.order.entity.Pay">
             <result column="pid" property="pid" />
             <result column="pname" property="pname" />
@@ -120,5 +121,13 @@
     <!-- 根据用户名查询总记录数 -->
     <select id="countOrderByUsername" resultType="int">
         select count(1) from g_d_order where username=#{username}
+    </select>
+    <!--    当状态为已完成订单时，显示个人详情页图标-->
+    <select id="findBySuccess" resultMap="orderResult">
+        <![CDATA[
+        select b.* from
+            (select o.*,p.pname,s.sname,s.sid from g_d_order o ,g_d_o_pay p ,g_d_o_state s
+             where username=#{username} and o.state='3' and o.payway=p.pid and o.state=s.sid ) b
+        ]]>
     </select>
 </mapper>

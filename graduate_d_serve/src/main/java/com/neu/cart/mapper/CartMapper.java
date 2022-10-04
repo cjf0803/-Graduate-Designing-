@@ -1,9 +1,11 @@
 package com.neu.cart.mapper;
 
+import com.alibaba.fastjson.JSONArray;
 import com.neu.cart.entity.Cart;
 import com.neu.order.entity.Order;
 import com.neu.product.entity.Product;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -27,10 +29,11 @@ public interface CartMapper {
     public Cart findByPname(String pname,String username);
     public double totalSum(String username);
     public boolean addOrder(Map<String, Object> map);
-    public double avg(String username);
+    public double avg(String id);
     public boolean addCancelOrder(Map<String, Object> map);
     public List<Cart> findCartMo(Map<String,Object> map);
     public int countMo(Map<String,Object> map);
+    public boolean insertAll(@Param("ids") String ids, @Param("detail") JSONArray detail, @Param("username") String username);
 
 
 }

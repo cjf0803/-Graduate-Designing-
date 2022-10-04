@@ -25,6 +25,33 @@
         </el-input>
       </div>
     </div>
+    <div style="position: absolute; top: 115px; left: 580px">
+      <el-progress
+        type="dashboard"
+        :percentage=33
+        color="#f56c6c"
+      ></el-progress>
+      <el-progress
+        type="dashboard"
+        :percentage=55
+        color="#e6a23c"
+      ></el-progress>
+      <el-progress
+        type="dashboard"
+        :percentage=77
+        color="#1989fa"
+      ></el-progress>
+      <el-progress
+        type="dashboard"
+        :percentage=88
+        color="#6f7ad3"
+      ></el-progress>
+      <el-progress
+        type="dashboard"
+        :percentage=100
+        color="#5cb87a"
+      ></el-progress>
+    </div>
     <el-table
       :data="tableData"
       ref="tableData"
@@ -68,10 +95,30 @@
       </el-table-column>
       <el-table-column label="订单状态" width="140">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.state.sid==='0'? 'info':(scope.row.state.sid==='1'?'warning':(scope.row.state.sid==='2'? 'warning':(scope.row.state.sid==='3'?'success':'success')))"> 
+          <el-tag
+            :type="
+              scope.row.state.sid === '0'
+                ? 'info'
+                : scope.row.state.sid === '1'
+                ? 'danger'
+                : scope.row.state.sid === '2'
+                ? 'warning'
+                : scope.row.state.sid === '3'
+                ? 'success'
+                : 'success'
+            "
+          >
             <i class="el-icon-loading"></i>
-          <span style="margin-left: 10px">{{ scope.row.state.sname }}</span></el-tag>
-         
+            <span style="margin-left: 10px">{{
+              scope.row.state.sname
+            }}</span></el-tag
+          >
+        </template>
+      </el-table-column>
+      <el-table-column label="详情id" width="80" v-if="false">
+        <template slot-scope="scope">
+          <i class="el-icon-s-custom"></i>
+          <span style="margin-left: 10px">{{ scope.row.detail_id }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作时间" width="140">
@@ -86,19 +133,20 @@
           <span style="margin-left: 10px">{{ scope.row.author }}</span>
         </template>
       </el-table-column>
+
       <el-table-column label="操作">
         <!-- scope作用域插槽，可以通过scope绑定当前行的数据 -->
         <template slot-scope="scope">
           <el-tooltip
             effect="dark"
-            :disabled="scope.row.state.sid=='2'?true:false"
+            :disabled="scope.row.state.sid == '2' ? true : false"
             content="不允许操作！"
             placement="left"
             transition
           >
             <span>
               <el-button
-                :disabled="scope.row.state.sid=='2'?false:true"
+                :disabled="scope.row.state.sid == '2' ? false : true"
                 @click="success(scope.row)"
                 type="info"
                 icon="el-icon-info"
@@ -124,9 +172,62 @@
               >
             </span>
           </el-tooltip>
+         
+            <span style="margin-right: 7px">
+              <el-button
+                @click="detail(scope.row)"
+                type="warning"
+                icon="el-icon-delete"
+                style="margin-top: 10px"
+                >详情</el-button
+              >
+            </span>
+         
         </template>
       </el-table-column>
     </el-table>
+    <!-- 编辑产品近期收益率弹窗 -->
+    <el-drawer
+      title="订单详情信息"
+      direction="ttb"
+      :visible.sync="detailVisible"
+      size="76%"
+    >
+      <el-table :data="DetailData" style="width: 100%" max-height="450">
+        <el-table-column fixed  label="产品图片" width="350">
+          <template slot-scope="scope">
+          <img
+           style="width:250px;height:85px" 
+            :src="require('@/assets/images/appearance/' + scope.row.pimg)"
+          />
+        </template>
+        </el-table-column>
+        <el-table-column label="产品名称"  width="300">
+          <template slot-scope="scope"><i class="el-icon-info" style="margin-right:15px"></i>{{ scope.row.pname }} </template>
+        </el-table-column>
+        <el-table-column label="产品单价" sortable width="300">
+          <template slot-scope="scope"><i class="el-icon-coin" style="margin-right:10px"></i> {{ scope.row.price }}元 </template>
+        </el-table-column>
+        <el-table-column label="产品平均收益率" sortable width="300">
+          <template slot-scope="scope"><i class="el-icon-s-claim" style="margin-right:10px"></i> {{ scope.row.averagerate }}% </template>
+        </el-table-column>
+        <el-table-column label="下单者"  width="250">
+          <template slot-scope="scope"><el-tag size="medium">{{ scope.row.username }}</el-tag></template>
+        </el-table-column>
+      </el-table>
+      <div class="fenye">
+        <!-- 分页 -->
+        <el-pagination
+          background
+          @current-change="changePage1"
+          layout="total,prev, pager, next,jumper"
+          :current-page="currentPage1"
+          :page-size="pageSize1"
+          :total="total1"
+        >
+        </el-pagination>
+      </div>
+    </el-drawer>
 
     <el-button
       :disabled="currentRole > 2 ? false : true"
@@ -166,11 +267,15 @@ export default {
         return row.oid;
       },
       currentRole: "",
-      currentPage:1,
+      currentPage: 1,
+      currentPage1: 1,
       total: 0,
+      total1: 0,
       pageSize: 1,
+      pageSize1: 1,
       keywords: "",
-     
+      detail_id:"",
+      detailVisible: false,
       multipleSelection: [],
       tableData: [
         {
@@ -191,6 +296,17 @@ export default {
           },
           executetime: "",
           author: "",
+          detail_id: "",
+        },
+      ],
+      DetailData: [
+        {
+          id: "",
+          pname: "",
+          pimg: "",
+          price: "",
+          averagerate: "",
+          username: "",
         },
       ],
     };
@@ -206,7 +322,6 @@ export default {
       this.total = req.data.count;
       this.pageSize = req.data.list.length;
     });
-   
   },
   methods: {
     delAll: function () {
@@ -227,7 +342,7 @@ export default {
               if (res != null) {
                 this.$message({
                   showClose: true,
-                  message: "批量删除成功!",
+                  message: "批量删除订单且删除详情数据成功！",
                   type: "success",
                 });
                 this.reload();
@@ -251,6 +366,26 @@ export default {
         this.$refs.tableData.clearSelection(); //elementUI 官方文档的方法 不过直接使用会报错
         this.multipleSelection = [];
       });
+    },
+    detail: function (row) {
+      this.detailVisible=true
+      this.$http
+        .get(
+          "http://localhost:8081/orderDetail/findDetailById/1" +
+            "/" +
+            row.detail_id,
+          { xhrFields: { withCredentials: true } },
+          { crossDomain: true }
+        )
+        .then((res) => {
+          if (res != null) {
+            console.log(res.data)
+            this.DetailData=res.data.list
+            this.total1=res.data.count
+            this.pageSize1=res.data.list.length
+           
+          }
+        });
     },
     delOrder: function (row) {
       console.log(row);
@@ -294,7 +429,10 @@ export default {
         .then(() => {
           this.$http
             .get(
-              "http://localhost:8081/order/updateTwo/" + row.oid+"/"+row.username,
+              "http://localhost:8081/order/updateTwo/" +
+                row.oid +
+                "/" +
+                row.username,
               { xhrFields: { withCredentials: true } },
               { crossDomain: true }
             )
@@ -321,6 +459,15 @@ export default {
         .get("http://localhost:8081/order/findOrder/" + index)
         .then((res) => {
           this.tableData = res.data.list;
+         
+        });
+    },
+    changePage1: function (index) {
+     
+      this.$http
+        .get("http://localhost:8081/orderDetail/findDetailById/" + index+"/"+this.DetailData[0].id)
+        .then((res) => {
+          this.DetailData=res.data.list
         });
     },
     handleSelectionChange(val) {
@@ -351,11 +498,11 @@ export default {
   display: flex;
   width: 200px;
   margin-right: 15px;
-  margin-bottom: 10px;
+  margin-bottom: 34px;
 }
 .flex {
   float: left;
-  margin-top: 15px;
+  margin-top: 30px;
 }
 .el-button--info {
   color: #fff;
