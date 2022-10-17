@@ -1,10 +1,10 @@
 # -Graduate-Designing-
 
-
+![](images/adminLogin.jpg)
 
 # --吾爱理财平台毕业设计
 
-![](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/adminLogin.jpg)
+
 
 【项目简介】
 
