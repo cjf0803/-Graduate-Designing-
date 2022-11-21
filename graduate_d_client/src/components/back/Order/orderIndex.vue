@@ -78,13 +78,13 @@
       <el-table-column label="支付金额" width="140">
         <template slot-scope="scope">
           <i class="el-icon-info"></i>
-          <span style="margin-left: 5px">{{ scope.row.totalsum }}</span>
+          <span style="margin-left: 5px">{{ scope.row.totalsum }}元</span>
         </template>
       </el-table-column>
       <el-table-column label="预期收益" width="140">
         <template slot-scope="scope">
           <i class="el-icon-s-claim"></i>
-          <span style="margin-left: 10px">{{ scope.row.exincome }}</span>
+          <span style="margin-left: 10px">{{ scope.row.exincome }}元</span>
         </template>
       </el-table-column>
       <el-table-column label="支付方式" width="140">
@@ -139,14 +139,14 @@
         <template slot-scope="scope">
           <el-tooltip
             effect="dark"
-            :disabled="scope.row.state.sid == '2' ? true : false"
+            :disabled="scope.row.state.sid == '2' ? (currentRole>2 ? true:false) : false"
             content="不允许操作！"
             placement="left"
             transition
           >
             <span>
               <el-button
-                :disabled="scope.row.state.sid == '2' ? false : true"
+                :disabled="scope.row.state.sid == '2' ? (currentRole>2 ? false:true) : true"
                 @click="success(scope.row)"
                 type="info"
                 icon="el-icon-info"
@@ -266,7 +266,7 @@ export default {
       getRowKeys(row) {
         return row.oid;
       },
-      currentRole: "",
+      currentRole: 0,
       currentPage: 1,
       currentPage1: 1,
       total: 0,

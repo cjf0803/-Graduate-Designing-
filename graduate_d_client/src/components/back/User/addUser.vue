@@ -12,7 +12,9 @@
       <el-breadcrumb-item>promotion detail</el-breadcrumb-item>
     </el-breadcrumb>
     <div id="box">
-      <h1 style="margin: 0px 0px 20px 89px">用户添加</h1>
+      <div class="contentbox">
+        <img src="@/assets/img/log.svg" class="image1" alt="" />
+        <img src="@/assets/img/register.svg" class="image" alt="" />
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
         <el-form-item
           label="用户名"
@@ -65,6 +67,7 @@
         </el-form-item>
       </el-form>
     </div>
+  </div>
   </div>
 </template>
 
@@ -187,9 +190,32 @@ export default {
 
 <style scoped>
 #box {
-  margin: 65px 0px 0px -154px;
+  background-color:white;
+  height:530px;
+  position: relative;
+  left:0px;
+  top:32px
+}
+.contentbox{
+ position: relative;
+ right:67px;
+ top:50px
 }
 .cjf {
   margin: 0px 0px 0px 92px;
+}
+.image1{
+  position:absolute;
+  left:100px;
+  width:500px;
+  height:500px;
+
+}
+.image{
+  position:absolute;
+  right:-47px;
+  width:500px;
+  height:500px;
+
 }
 </style>

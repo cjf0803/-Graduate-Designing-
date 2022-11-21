@@ -140,50 +140,44 @@
       <el-aside width="200px">
         <!--侧边栏菜单区域-->
         <el-menu
-          background-color="black"
+          background-color="white"
           text-color="#fff"
           active-text-color="#409eff"
           :router="true"
+          :unique-opened="true"
           ><!--二级菜单颜色,unique-opened菜单只打开一个.:router="true":开启菜单路由模式-->
           <!--一级菜单-->
 
-          <el-menu-item index="home" style="background-color:#454b5d" >
+          <el-menu-item index="home">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-s-home"></i>
               <!--文本-->
-              <span style="margin-right: 27px">首页</span>
+              <span class="fontColor" style="margin-right: 27px;">首页</span>
             </template>
           </el-menu-item>
-        </el-menu>
+       
 
-        <el-menu
-          background-color="#454b5d"
-          text-color="#fff"
-          active-text-color="#409eff"
-          :router="true"
-          ><!--二级菜单颜色,unique-opened菜单只打开一个.:router="true":开启菜单路由模式-->
-          <!--一级菜单-->
 
-          <el-submenu index="1" style="background-color:#454b5d" >
+          <el-submenu index="1"  >
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-user"></i>
               <!--文本-->
-              <span>用户管理</span>
+              <span  class="fontColor" >用户管理</span>
             </template>
             <!--二级菜单-->
             <!--index对应要跳转到的视图-->
-            <el-menu-item index="index" style="background-color:#454b5d">
+            <el-menu-item index="index" >
               <template slot="title">
                 <!--图标-->
                 <div class="space">
                   <i class="el-icon-menu"></i
                   ><!--二级菜单图标-->
                   <!--文本-->
-                  <span>用户列表</span>
+                  <span  class="fontColor" >用户列表</span>
                 </div>
               </template>
             </el-menu-item>
@@ -196,7 +190,6 @@
             >
               <el-menu-item
                 index="role"
-                style="background-color:#454b5d"
                 :disabled="currentRole >= 4 ? false : true"
               >
                 <template slot="title" >
@@ -205,7 +198,7 @@
                     <i class="el-icon-guide"></i
                     ><!--二级菜单图标-->
                     <!--文本-->
-                    <span>角色管理</span>
+                    <span  class="fontColor" >角色管理</span>
                   </div>
                 </template>
               </el-menu-item>
@@ -227,40 +220,24 @@
                     <i class="el-icon-circle-plus-outline"></i
                     ><!--二级菜单图标-->
                     <!--文本-->
-                    <span>添加用户</span>
+                    <span  class="fontColor" >添加用户</span>
                   </div>
                 </template>
               </el-menu-item>
             </el-tooltip>
-            <el-menu-item index="findUserMo" style="background-color:#454b5d">
-              <template slot="title">
-                <!--图标-->
-                <div class="space">
-                  <i class="el-icon-s-operation"></i
-                  ><!--二级菜单图标-->
-                  <!--文本-->
-                  <span>模糊查询</span>
-                </div>
-              </template>
-            </el-menu-item>
           </el-submenu>
-        </el-menu>
+     
 
-        <!--侧边栏菜单区域-->
-        <el-menu
-          background-color="#454b5d"
-          text-color="#fff"
-          active-text-color="#409eff"
-          :router="true"
-        >
+       
+      
           <!--一级菜单-->
-          <el-submenu index="1">
+          <el-submenu index="2">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-reading"></i>
               <!--文本-->
-              <span>理财管理</span>
+              <span  class="fontColor" >理财管理</span>
             </template>
             <!--二级菜单-->
             <el-menu-item index="productIndex">
@@ -269,110 +246,88 @@
                 <div class="space">
                   <i class="el-icon-set-up"></i>
                   <!--文本-->
-                  <span>总览</span>
+                  <span  class="fontColor" >总览</span>
                 </div>
               </template>
             </el-menu-item>
-            <el-menu-item >
-              <template slot="title">
+            <el-menu-item index="findProductByType?ptype=2">
+              <template slot="title" >
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findProductByType', query: { ptype: '2' } }"
-                >
                   <div class="space">
                     <i class="el-icon-document-add"></i>
                     <!--文本-->
-                    <span>股票</span>
+                    <span  class="fontColor" >股票</span>
                   </div>
-                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item >
+            <el-menu-item index="findProductByType?ptype=1" >
               <template slot="title">
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findProductByType', query: { ptype: '1' } }"
-                >
                   <div class="space">
                     <i class="el-icon-loading"></i>
                     <!--文本-->
-                    <span>基金</span>
+                    <span  class="fontColor" >基金</span>
                   </div>
-                </router-link>
               </template>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="findProductByType?ptype=3">
               <template slot="title">
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findProductByType', query: { ptype: '3' } }"
-                >
+              
                   <div class="space">
                     <i class="el-icon-view"></i>
                     <!--文本-->
-                    <span>债券</span>
+                    <span  class="fontColor" >债券</span>
                   </div>
-                </router-link>
+              
               </template>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="findProductByType?ptype=4">
               <template slot="title">
-                <!--图标-->
-                <router-link
-                  :to="{ path: '/findProductByType', query: { ptype: '4' } }"
-                >
+                
                   <div class="space">
                     <i class="el-icon-c-scale-to-original"></i>
                     <!--文本-->
-                    <span>银行</span>
+                    <span  class="fontColor" >银行</span>
                   </div>
-                </router-link>
+            
               </template>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="findProductByType?ptype=5">
               <template slot="title">
-                <!--图标-->
-                <router-link
-                  :to="{ path: '/findProductByType', query: { ptype: '5' } }"
-                >
+               
                   <div class="space">
                     <i class="el-icon-paperclip"></i>
                     <!--文本-->
-                    <span>保险</span>
+                    <span  class="fontColor" >保险</span>
                   </div>
-                </router-link>
+             
               </template>
             </el-menu-item>
-            <el-menu-item>
+            <el-menu-item index="findProductByType?ptype=6">
               <template slot="title">
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findProductByType', query: { ptype: '6' } }"
-                >
+               
                   <div class="space">
                     <i class="el-icon-search"></i>
                     <!--文本-->
-                    <span>黄金</span>
+                    <span  class="fontColor" >黄金</span>
                   </div>
-                </router-link>
+            
               </template>
             </el-menu-item>
           </el-submenu>
-        </el-menu>
-        <!--侧边栏菜单区域-->
-        <el-menu
-          background-color="#454b5d"
-          text-color="#fff"
-          active-text-color="#409eff"
-        >
+     
+          <!--侧边栏菜单区域-->
+    
           <!--一级菜单-->
-          <el-submenu index="2">
+          <el-submenu index="3">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-shopping-cart-full"></i>
               <!--文本-->
-              <span>预购中心</span>
+              <span  class="fontColor" >预购中心</span>
             </template>
             <!--二级菜单-->
             <el-menu-item index="cartIndex">
@@ -381,27 +336,22 @@
                 <div class="space">
                   
                   <!--文本-->
-                  <router-link to="/cartIndex"><i class="el-icon-place" ></i><span>管理</span></router-link>
+                <i class="el-icon-place" ></i><span  class="fontColor" >管理</span>
                 </div>
               </template>
             </el-menu-item>
           </el-submenu>
-        </el-menu>
-        <!--侧边栏菜单区域-->
-        <el-menu
-          background-color="#454b5d"
-          text-color="#fff"
-          active-text-color="#409eff"
-          :router="true"
-        >
+      
+          <!--侧边栏菜单区域-->
+    
           <!--一级菜单-->
-          <el-submenu index="3">
+          <el-submenu index="4">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-truck"></i>
               <!--文本-->
-              <span>订单管理</span>
+              <span  class="fontColor" >订单管理</span>
             </template>
             <!--二级菜单-->
             <el-menu-item index="orderIndex">
@@ -410,183 +360,167 @@
                 <div class="space">
                   <i class="el-icon-set-up"></i>
                   <!--文本-->
-                  <span>总览</span>
+                  <span  class="fontColor" >总览</span>
                 </div>
               </template>
             </el-menu-item>
-            <el-menu-item >
+            <el-menu-item index="findOrderByState?state=0">
               <template slot="title">
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findOrderByState', query: { state: '0' } }"
-                >
+                
                 <div class="space">
                   <i class="el-icon-lollipop"></i>
                   <!--文本-->
-                  <span>等待中订单</span>
+                  <span  class="fontColor" >等待中订单</span>
                 </div>
-                </router-link>
+             
               </template>
             </el-menu-item>
-            <el-menu-item >
+            <el-menu-item  index="findOrderByState?state=1">
               <template slot="title">
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findOrderByState', query: { state: '1' } }"
-                >
+                
                 <div class="space">
                   <i class="el-icon-lollipop"></i>
                   <!--文本-->
-                  <span>已取消订单</span>
+                  <span  class="fontColor" >已取消订单</span>
                 </div>
-                </router-link>
+              
               </template>
             </el-menu-item>
-            <el-menu-item >
+            <el-menu-item  index="findOrderByState?state=2">
               <template slot="title">
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findOrderByState', query: { state: '2' } }"
-                >
+                
                 <div class="space">
                   <i class="el-icon-lollipop"></i>
                   <!--文本-->
-                  <span>已支付订单</span>
+                  <span  class="fontColor" >已支付订单</span>
                 </div>
-                </router-link>
+              
               </template>
             </el-menu-item>
-            <el-menu-item >
+            <el-menu-item  index="findOrderByState?state=3">
               <template slot="title">
                 <!--图标-->
-                <router-link
-                  :to="{ path: '/findOrderByState', query: { state: '3' } }"
-                >
+              
                 <div class="space">
                   <i class="el-icon-lollipop"></i>
                   <!--文本-->
-                  <span>已完成订单</span>
+                  <span  class="fontColor" >已完成订单</span>
                 </div>
-                </router-link>
+                
               </template>
             </el-menu-item>
            
           </el-submenu>
-        </el-menu>
+   
 
         
-        <!--侧边栏菜单区域-->
-        <el-menu
-          background-color="#454b5d"
-          text-color="#fff"
-          active-text-color="#409eff"
-        >
+          <!--侧边栏菜单区域-->
+        
           <!--一级菜单-->
-          <el-submenu index="4">
+          <el-submenu index="5">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-data-analysis"></i>
               <!--文本-->
-              <span>数据统计</span>
+              <span  class="fontColor" >数据统计</span>
             </template>
             <!--二级菜单-->
             <el-menu-item index="echarts">
               <template slot="title">
                 <!--图标-->
-                <router-link to='/echarts'>
+                
                 <div class="space">
                   <i class="el-icon-menu"></i>
                   <!--文本-->
-                  <span>图表总览</span>
+                  <span  class="fontColor" >图表总览</span>
                 </div>
-              </router-link>
+           
               </template>
             </el-menu-item>
           </el-submenu>
-        </el-menu>
-        <el-menu
-          background-color="#454b5d"
-          text-color="#fff"
-          active-text-color="#409eff"
-        >
+       
+      
           <!--一级菜单-->
-          <el-submenu index="1">
+          <el-submenu index="6">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-coin"></i>
               <!--文本-->
-              <span>流水管理</span>
+              <span  class="fontColor" >流水管理</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item index="1-4-1">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
                 <div class="space">
                   <i class="el-icon-menu"></i>
                   <!--文本-->
-                  <span>导航一</span>
+                  <span  class="fontColor" >导航一</span>
                 </div>
               </template>
             </el-menu-item>
           </el-submenu>
-          <el-submenu index="1">
+          <el-submenu index="7">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-news"></i>
               <!--文本-->
-              <span>目标管理</span>
+              <span  class="fontColor" >目标管理</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item index="1-4-1">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
                 <div class="space">
                   <i class="el-icon-menu"></i>
                   <!--文本-->
-                  <span>导航一</span>
+                  <span  class="fontColor" >导航一</span>
                 </div>
               </template>
             </el-menu-item>
           </el-submenu>
-          <el-submenu index="1">
+          <el-submenu index="8">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-chat-dot-round"></i>
               <!--文本-->
-              <span>意见管理</span>
+              <span  class="fontColor" >意见管理</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item index="1-4-1">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
                 <div class="space">
                   <i class="el-icon-menu"></i>
                   <!--文本-->
-                  <span>导航一</span>
+                  <span  class="fontColor" >导航一</span>
                 </div>
               </template>
             </el-menu-item>
           </el-submenu>
-          <el-submenu index="1">
+          <el-submenu index="9">
             <!--一级菜单模板区-->
             <template slot="title">
               <!--图标-->
               <i class="el-icon-place"></i>
               <!--文本-->
-              <span>系统管理</span>
+              <span  class="fontColor" >系统管理</span>
             </template>
             <!--二级菜单-->
-            <el-menu-item index="1-4-1">
+            <el-menu-item >
               <template slot="title">
                 <!--图标-->
                 <div class="space">
                   <i class="el-icon-menu"></i>
                   <!--文本-->
-                  <span>导航一</span>
+                  <span  class="fontColor" >导航一</span>
                 </div>
               </template>
             </el-menu-item>
@@ -806,7 +740,8 @@ export default {
   margin-top: -30px;
 }
 .el-header {
-  background-color: #132a3c;
+  /* background-color: #81a7c6; */
+  background-image: linear-gradient(#81a7c6,white);
   display: flex;
   justify-content: space-between;
   padding-left: 0;
@@ -814,13 +749,14 @@ export default {
   color: #fff;
   height: 200px;
 }
+.el-submenu__title{
+  background-color: aliceblue;
+}
 span {
   margin-left: 20px;
   color: white;
 }
-.space :hover {
-  color: inherit;
-}
+
 .head-logo {
   display: flex;
   align-items: center;
@@ -842,7 +778,7 @@ span {
 }
 
 .el-aside {
-  background-color: #454b5d;
+  background-color: white;
   overflow: hidden;
 }
 .el-main {
@@ -851,9 +787,8 @@ span {
 .space {
   margin-left: 17px;
 }
-.space:hover {
-  color: aqua;
-}
+
+
 
 .font {
   font-family: sans-serif;
@@ -885,6 +820,7 @@ a {
 .router-link-active {
   text-decoration: none;
   color: aqua;
+  
 }
 .image {
   border-radius: 50%;
@@ -893,5 +829,8 @@ a {
   width: 150px;
 }
 
-
+.fontColor{
+ font-weight: 500;
+  color:black
+}
 </style>

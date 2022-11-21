@@ -96,7 +96,7 @@
       <el-table-column label="余额" width="160">
         <template slot-scope="scope">
           <i class="el-icon-coin"></i>
-          <span style="margin-left: 10px">{{ scope.row.moneyid.balance }}</span>
+          <span style="margin-left: 10px">{{ scope.row.moneyid.balance }}元</span>
         </template>
       </el-table-column>
       <el-table-column label="操作">

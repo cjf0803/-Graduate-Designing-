@@ -64,7 +64,7 @@ public class ProductController {
         return map;
     }
 
-    @ApiOperation("普通用户根据类型查询产品（不分页）")
+    @ApiOperation("普通用户根据类型查询产品")
     @GetMapping(value = "/CustomerfindProductByType/{ptype}")
     public Map<String, Object> CustomerfindProductByType(@PathVariable("ptype") String ptype) {
         List<Product> list = productBiz.CustomerfindProductByType(ptype);
@@ -91,7 +91,6 @@ public class ProductController {
     public boolean deleteProduct(@ApiParam("删除的参数") @PathVariable("id") String id) {
         System.out.println(id);
         return productBiz.deleteProduct(id);
-
     }
 
     @ApiOperation("根据id查询产品接口")

@@ -355,10 +355,9 @@ export default {
           return;
         }
         if (index === 4) {
-          sums[index] = "已选中商品" + this.selNum + "件";
+          sums[index] = "已选中产品" + this.selNum + "件";
         }
       });
-
       return sums;
     },
     handleSelectionChange(val) {
@@ -368,7 +367,6 @@ export default {
         return item["cid"];
       });
       console.log("选中的商品id数组：" + this.selectionIds);
-
       this.totalSum = 0.0; //每次调用清零 重新计算！！！
       for (var index of val) {
         this.totalSum += index.price * index.pnum;

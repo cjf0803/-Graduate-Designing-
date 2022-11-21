@@ -19,8 +19,8 @@
         <!-- 登录 -->
         <div class="login-box">
           <h1>login</h1>
-          <input type="text" v-model="tabelData.username" placeholder="用户名" />
-          <input type="password"  v-model="tabelData.password" placeholder="密码" />
+          <input type="text"  v-model="tabelData.username" placeholder="用户名~" />
+          <input type="password"    v-model="tabelData.password" placeholder="密码~" />
           <button @click="login">登录</button>
         </div>
       </div>
@@ -70,10 +70,13 @@
 <script>
 export default {
   name: "front_login",
-
+  inject: ["reload"],
   data() {
     return {
     dialogbuttonVisible:false,
+    rules: {
+          required: true, message: "请输入用户名", trigger: "blur" 
+      },
     puzzleImgList: [
         require("@/assets/img/user/0.jpg"),
         require("@/assets/img/user/1.jpg"),
@@ -150,11 +153,15 @@ export default {
                   type: "success",
                 });
               }
+              setTimeout(()=>{
+                this.reload();
+              },1000)
+              
             })
             .catch(() => {
               this.$message({
                 type: "error",
-                message: "注册失败",
+                message: "注册失败，该用户已注册！",
               });
             });
         })
@@ -282,6 +289,7 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
+
 }
 .hidden {
   display: none;
@@ -411,5 +419,10 @@ input:focus::placeholder {
   left: 50%;
   top: 0;
   transform: translate(-50%);
+}
+.input-field{
+  height:44px;
+  align-items: center;
+  color:#8e9aaf
 }
 </style>

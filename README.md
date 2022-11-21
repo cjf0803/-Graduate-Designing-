@@ -1,6 +1,18 @@
 # -Graduate-Designing-
 
-![](images/adminLogin.jpg)
+![image text](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/frontHome1.jpg)
+
+![image text](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/frontPersonl1.jpg)
+
+![image text](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/backUserList.jpg)
+
+![image text](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/backCart.jpg)
+
+![image text](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/frontShares.jpg)
+
+![image text](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/adminLogin.jpg)
+
+![image text](https://github.com/cjf0803/-Graduate-Designing-/blob/main/images/frontPersonl1.jpg)
 
 # --吾爱理财平台毕业设计
 
@@ -538,3 +550,25 @@ create table g_d_o_detail(
 ​	当用户已支付完成后，等待管理员结算金额时，计算平均收益率时
 
 - [x] ​	不管用户是从预购中心还是直接支付的方式，计算平均收益率时都应该从订单详情表中进行计算，并且根据订单详情id进行筛选
+
+最后的优化！！
+
+- [ ] 路由/图片懒加载
+
+- [x] 登录注册用户名唯一
+
+- [ ] 路由守卫
+
+- [ ] 商品的状态控制
+
+- [x] 用户添加的页面优化
+
+- [x] 低权限管理员不能对订单执行完成
+
+- [x] 后台管理订单预期收益+-
+
+  
+  
+  
+  
+  

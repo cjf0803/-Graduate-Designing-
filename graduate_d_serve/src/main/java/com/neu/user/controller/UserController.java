@@ -51,6 +51,12 @@ public class UserController {
     public boolean regist(@ApiParam("用户名") @PathVariable("username") String username, @ApiParam("密码") @PathVariable("password") String password,@ApiParam("邮箱") @PathVariable("email") String email){
         User user = new User(username, password,email);
         userBiz.addMoney();
+//        boolean b=false;
+//        try{
+//            b=userBiz.regist(user);
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
         return userBiz.regist(user);
     }
     @ApiOperation("用户信息接口")
