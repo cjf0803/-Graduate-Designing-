@@ -5,12 +5,13 @@ import axios from 'axios'
 import ElementUI from 'element-ui'
 import echarts from "echarts";
 import jquery from 'jquery'
+import VueLazyload from 'vue-lazyload'
 import 'element-ui/lib/theme-chalk/index.css';
 import store from './store'
 import SlideVerify from 'vue-monoplasty-slide-verify';
 Vue.use(ElementUI);
 Vue.use(SlideVerify);
-
+Vue.use(VueLazyload)
 Vue.prototype.$echarts = echarts;
 //解决sessionid，如果是axios请求用下面的配置
 axios.defaults.withCredentials=true

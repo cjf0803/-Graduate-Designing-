@@ -1,6 +1,5 @@
 <template>
   <div>
-   
     <div id="main1" style="width: 100%; height: 600px"></div>
     <el-divider></el-divider>
     <div

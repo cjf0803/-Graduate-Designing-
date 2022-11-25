@@ -505,6 +505,8 @@ export default {
       if (command == "a") {
         this.$router.push({ name: "frontLogin" });
       } else if (command == "b") {
+        localStorage.removeItem("loginData");
+        this.$store.commit("setUserInfo", {});
         this.$router.push({ name: "login" });
       } else {
         this.$confirm("退出当前用户, 是否退出?", "提示", {

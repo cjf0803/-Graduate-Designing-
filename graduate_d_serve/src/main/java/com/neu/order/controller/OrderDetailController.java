@@ -45,7 +45,7 @@ public class OrderDetailController {
         if (index == null) {
             index = 1;
         }
-        int size = 10;
+        int size = 7;
         String username=(String) request.getSession().getAttribute("username");
         List<Detail> list = orderDetailBiz.findDetailByUsername(index,size,username);
 

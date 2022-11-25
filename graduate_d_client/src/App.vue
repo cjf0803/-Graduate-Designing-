@@ -1,7 +1,6 @@
 <template>
   <div id="app">
-    <router-view v-if="showRouterView"></router-view>
-    <el-backtop :bottom="100" >
+    <el-backtop :bottom="100">
       <div
         style="
            {
@@ -16,8 +15,9 @@
         "
       >
           <i class="el-icon-top"></i>
-      </div></el-backtop
-    >
+      </div>
+      </el-backtop>
+    <router-view v-if="showRouterView"></router-view>
   </div>
 </template>
 

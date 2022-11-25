@@ -1,27 +1,12 @@
 <template>
   <div id="box">
     <!-- @select="handlerSelect" -->
-    <el-table
-      show-summary
-      ref="tableData"
-      :data="tableData"
-      :row-key="getRowKeys"
-      tooltip-effect="dark"
-      style="width: 88%; margin-left: 125px"
-      :summary-method="getSummaries"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column
-        type="selection"
-        width="55"
-        :reserve-selection="true"
-      ></el-table-column>
+    <el-table show-summary ref="tableData" :data="tableData" :row-key="getRowKeys" tooltip-effect="dark"
+      style="width: 88%; margin-left: 125px" :summary-method="getSummaries" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" :reserve-selection="true"></el-table-column>
       <el-table-column label="产品图片" width="120">
         <template slot-scope="scope">
-          <img
-            class="image"
-            :src="require('@/assets/images/appearance/' + scope.row.pimg)"
-        /></template>
+          <img class="image" :src="require('@/assets/images/appearance/' + scope.row.pimg)" /></template>
       </el-table-column>
       <el-table-column label="产品名称" width="180px">
         <template slot-scope="scope">
@@ -33,32 +18,21 @@
           <el-badge is-dot class="item"> {{ scope.row.price }}元</el-badge>
         </template>
       </el-table-column>
-      <el-table-column
-        label="平均收益率%"
-        prop="averagerate"
-        sortable
-        width="160px"
-      >
-        <template slot-scope="scope"
-          ><span style="color: crimson"> {{ scope.row.averagerate }}%</span>
+      <el-table-column label="平均收益率%" prop="averagerate" sortable width="160px">
+        <template slot-scope="scope"><span style="color: crimson"> {{ scope.row.averagerate }}%</span>
         </template>
       </el-table-column>
       <el-table-column label="预购数量" width="220px">
         <template slot-scope="scope">
-          <el-input-number
-            v-model="scope.row.pnum"
-            @change="handleChange(scope.row)"
-            :min="1"
-            :max="9999"
-          ></el-input-number>
+          <el-input-number v-model="scope.row.pnum" @change="handleChange(scope.row)" :min="1" :max="9999">
+          </el-input-number>
         </template>
       </el-table-column>
       <el-table-column label="小计" sortable width="170px">
         <template slot-scope="scope">
           <i class="el-icon-coin"></i>&nbsp;
-          <span style="color: darkorange; font-weight: bolder"
-            >{{ (scope.row.pnum * scope.row.price) | numFilter }}元</span
-          >
+          <span style="color: darkorange; font-weight: bolder">{{ (scope.row.pnum * scope.row.price) | numFilter
+          }}元</span>
         </template>
       </el-table-column>
       <el-table-column label="预购者" width="180px">
@@ -68,45 +42,22 @@
       </el-table-column>
       <el-table-column label="操作" width="100" style="z-index: 0">
         <template slot-scope="scope">
-          <el-button @click="delProduct(scope.row)" type="text" size="small"
-            >删除</el-button
-          >
+          <el-button @click="delProduct(scope.row)" type="text" size="small">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-button
-      @click="delAll"
-      style="float: left; margin-left: 185px; margin-top: 15px"
-      type="warning"
-      plain
-      >批量删除</el-button
-    >
-    <el-button
-      @click="clear"
-      style="float: left; margin-left: 13px; margin-top: 15px"
-      type="info"
-      plain
-      >清空选择</el-button
-    >
-    <el-button
-      @click="goBuy"
-      style="float: left; margin-left: 13px; margin-top: 15px"
-      type="success"
-      plain
-      >继续购物</el-button
-    >
+    <el-button @click="delAll" style="float: left; margin-left: 185px; margin-top: 15px" type="warning" plain>批量删除
+    </el-button>
+    <el-button @click="clear" style="float: left; margin-left: 13px; margin-top: 15px" type="info" plain>清空选择
+    </el-button>
+    <el-button @click="goBuy" style="float: left; margin-left: 13px; margin-top: 15px" type="success" plain>继续购物
+    </el-button>
 
     <div class="fenye" style="margin-top: 20px; margin-right: 245px">
       <!-- 分页 -->
 
-      <el-pagination
-        background
-        @current-change="changePage"
-        layout="total,prev, pager, next,jumper"
-        :current-page="currentPage"
-        :page-size="pageSize"
-        :total="total"
-      >
+      <el-pagination background @current-change="changePage" layout="total,prev, pager, next,jumper"
+        :current-page="currentPage" :page-size="pageSize" :total="total">
       </el-pagination>
       <!-- <el-pagination
                     background
@@ -114,39 +65,20 @@
                     layout="prev, pager, next"
                     :total="50">
             </el-pagination> -->
-      <span
-        style="
-          font-size: x-large;
-          position: relative;
-          bottom: 109px;
-          left: 435px;
-        "
-        >预购总价：￥{{ totalSum > 0 ? totalSum.toFixed(2) : "0.00" }}元</span
-      >
+      <span style="font-size: x-large;position: relative;bottom: 109px;left: 435px;">
+        预购总价：￥{{ totalSum > 0 ? totalSum.toFixed(2) : "0.00" }}元
+      </span>
     </div>
-    <el-button
-      @click="dialogFormVisible = true"
-      type="danger"
-      style="position: relative; bottom: 143px; left: 629px"
-      >结算</el-button
-    >
+    <el-button @click="dialogFormVisible = true" type="danger" style="position: relative; bottom: 143px; left: 629px">结算
+    </el-button>
     <el-dialog title="确认支付信息" :visible.sync="dialogFormVisible">
       <el-form>
         <el-form-item label="用户名" :label-width="formLabelWidth">
-          <el-input
-            v-model="tableData[0].username"
-            autocomplete="off"
-            readonly
-            suffix-icon="el-icon-user"
-          ></el-input>
+          <el-input v-model="tableData[0].username" autocomplete="off" readonly suffix-icon="el-icon-user"></el-input>
         </el-form-item>
         <el-form-item label="总额" :label-width="formLabelWidth">
-          <el-input
-            v-model="totalSum"
-            autocomplete="off"
-            readonly
-            suffix-icon="el-icon-coin"
-          ></el-input>
+          <el-input  :value="formatRound(totalSum)"  autocomplete="off" readonly
+            suffix-icon="el-icon-coin"></el-input>
         </el-form-item>
         <el-form-item label="支付方式" :label-width="formLabelWidth">
           <el-select v-model="payWay" placeholder="请选择支付方式">
@@ -185,7 +117,7 @@ export default {
       selNum: 0,
       sum: 0.0,
       flag: true,
-      username:"",
+      username: "",
       i: 0,
       getRowKeys(row) {
         return row.cid;
@@ -229,9 +161,17 @@ export default {
     //   //让tableData中每一个item都增加一个属性select并且为true
     //   this.$set(item,'select',true);
     // })
+
   },
 
   methods: {
+    // handleInput(e) {
+    //   // 通过正则过滤小数点后两位
+    //   e.target.value = (e.target.value.match(/^\d*(\.?\d{0,1})/g)[0]) || null
+    // },
+    formatRound(num){
+      return(Math.round(num*100)/100).toFixed(2);
+    },
     addOrder: function () {
       this.$confirm("信息是否正确, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -247,8 +187,8 @@ export default {
             this.$jquery.ajax({
               url: "http://localhost:8081/cart/addOrder",
               data:
-                "detail="+detail+"&totalSum="+this.totalSum+"&payWay="+this.payWay+"&detail_id="+detail_id+"&username="+this.username
-                ,
+                "detail=" + detail + "&totalSum=" + this.totalSum + "&payWay=" + this.payWay + "&detail_id=" + detail_id + "&username=" + this.username
+              ,
               type: "post",
               dataType: "json",
               success: function (res) {
@@ -385,15 +325,20 @@ export default {
           // this.reload();
         });
       let val = this.multipleSelection;
+     
       for (var index of val) {
         this.totalSum += index.price * index.pnum;
+
       }
+      console.log(this.totalSum);
     },
     changePage: function (index) {
       this.$http
         .get("http://localhost:8081/cart/findCartByUsername/" + index)
         .then((res) => {
+         
           this.tableData = res.data.list;
+          
         });
     },
     goBuy: function () {
@@ -440,10 +385,12 @@ export default {
   background-image: url("@/assets/images/appearance/bg.jpg");
   min-height: 500px;
 }
+
 .image {
   height: 80px;
   width: 80px;
 }
+
 div .cell {
   z-index: 0;
 }

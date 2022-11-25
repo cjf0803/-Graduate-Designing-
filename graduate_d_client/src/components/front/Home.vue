@@ -1,8 +1,5 @@
 <template>
   <div>
-    <el-backtop
-      target=".page-component__scroll .el-scrollbar__wrap"
-    ></el-backtop>
     <el-main class="content">
       <el-row style="margin-top:-23px">
         <el-col :span="16" :offset="4">
@@ -72,9 +69,7 @@
     <el-row class="goods">
       <el-col :span="22" :offset="1">
         <el-image
-          v-for="(item, index) in appList"
-          :src="item"
-          :key="index"
+          v-for="(item, index) in appList" :src="item" :key="index"
         ></el-image>
       </el-col>
     </el-row>
